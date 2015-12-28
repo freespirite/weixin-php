@@ -1,0 +1,126 @@
+[
+    {
+        "name": "nette/utils",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nette/utils.git",
+            "reference": "db7b6d10d69127bf4c85fc3f950b027653364cbd"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nette/utils/zipball/db7b6d10d69127bf4c85fc3f950b027653364cbd",
+            "reference": "db7b6d10d69127bf4c85fc3f950b027653364cbd",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.4"
+        },
+        "conflict": {
+            "nette/nette": "<2.2"
+        },
+        "require-dev": {
+            "nette/tester": "~1.0"
+        },
+        "suggest": {
+            "ext-gd": "to use Image",
+            "ext-iconv": "to use Strings::webalize() and toAscii()",
+            "ext-intl": "for script transliteration in Strings::webalize() and toAscii()",
+            "ext-mbstring": "to use Strings::lower() etc..."
+        },
+        "time": "2015-08-23 12:07:37",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause",
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "David Grudl",
+                "homepage": "http://davidgrudl.com"
+            },
+            {
+                "name": "Nette Community",
+                "homepage": "http://nette.org/contributors"
+            }
+        ],
+        "description": "Nette Utility Classes",
+        "homepage": "http://nette.org"
+    },
+    {
+        "name": "nette/mail",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nette/mail.git",
+            "reference": "bd37b2b7f22986a86039773347f26b48560b3c51"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nette/mail/zipball/bd37b2b7f22986a86039773347f26b48560b3c51",
+            "reference": "bd37b2b7f22986a86039773347f26b48560b3c51",
+            "shasum": ""
+        },
+        "require": {
+            "ext-iconv": "*",
+            "nette/utils": "~2.2",
+            "php": ">=5.4.4"
+        },
+        "conflict": {
+            "nette/nette": "<2.2"
+        },
+        "require-dev": {
+            "nette/di": "~2.3",
+            "nette/tester": "~1.3"
+        },
+        "suggest": {
+            "ext-fileinfo": "to detect type of attached files"
+        },
+        "time": "2015-07-11 20:58:23",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause",
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "David Grudl",
+                "homepage": "http://davidgrudl.com"
+            },
+            {
+                "name": "Nette Community",
+                "homepage": "http://nette.org/contributors"
+            }
+        ],
+        "description": "Nette Mail: Sending E-mails",
+        "homepage": "http://nette.org"
+    }
+]
