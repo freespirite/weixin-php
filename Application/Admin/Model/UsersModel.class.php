@@ -12,6 +12,13 @@ class UsersModel extends Model {
     
     protected $tableName = 'users';
     
+    protected $_validate = array (
+                                array('account','email','邮箱账号格式错误'),
+                                array('account','','帐号名称已经存在！',0,'unique',1),
+                                array('pwd','require','密码为必填项'),
+                                array('repwd','pwd','2次密码不一致',0,'confirm'),
+                            );
+    
     /*
      * 平台登录
      * @param $account string 登录账号

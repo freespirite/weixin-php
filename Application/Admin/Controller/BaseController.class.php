@@ -14,7 +14,7 @@ use Common\Library\Curl;
 class BaseController extends Controller {
 
     public function _initialize(){
-        if(!in_array(ACTION_NAME, array('login', 'logout', 'imgcode')) && !$this->checkLogin()) {
+        if(!in_array(ACTION_NAME, array('login', 'logout', 'imgcode', 'register')) && !$this->checkLogin()) {
             //echo '>>>>>>>>>'.ACTION_NAME.'>'.__CLASS__.'>'.__LINE__;exit();
            redirect(U('/admin/Index/login'));
         }

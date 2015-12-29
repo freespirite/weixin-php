@@ -54,6 +54,45 @@ class IndexController extends BaseController {
         }
     }
     
+    public function register() {
+        if (!IS_POST){
+            $this->display('reg');
+            return;
+        }
+        /*
+        public function tijiao(){
+		echo '000';
+			$user=new UserModel('user');
+			//dump($user);   //这里包括错误信息一切显示正常
+			if($user->create()){
+				if($user->add()){
+					$this->success('cg');
+				}else {
+					$this->error('sb');
+				}
+				dump($boo);
+				echo '111111111';
+			}else {
+				$this->error($user->getError());
+			}
+		$this->display();
+		}
+         */
+        $obj = new UsersModel();
+        $adminId = $obj->login($account, $pwd);
+        if(!$adminId) {
+            echo json_encode(array('code' => 2, 'msg' => '账号或密码错误'));
+        }
+        else {
+            session(C('ADMIN_SESSION'), $adminId);
+            if(intval(I('post.nologin'))) {
+                cookie(C('ADMIN_SESSION'), $adminId);
+            }
+            echo json_encode(array('code' => 1, 'msg' => 'ok'));
+        }
+    }
+
+
     /*
      * 平台管理员登录密码修改
      */
