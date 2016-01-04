@@ -143,6 +143,9 @@
             $('#imgcode').click(function(){
                 $(this).attr("src","{:U('Admin/Index/imgcode')}");
             });
+            $('#rimgcode').click(function(){
+                $(this).attr("src","{:U('Admin/Index/imgcode')}");
+            });
         });
         function postlogin() {
             var pwd = $('#pwd').val();
@@ -178,20 +181,20 @@
         }
         
         function postreg() {
-            var rpwd = $('#pwd').val();
-            var rrepwd = $('#repwd').val();
-            var raccount = $('#account').val();
-            var rcode = $('#code').val();
-            if(raccount === '') { _alert('请输入登录账号'); return false;}
-            if(rpwd === '') { _alert('请输入登录密码'); return false;}
-            if(rrepwd === '') { _alert('请再次输入登录密码'); return false;}
-            if(rpwd !== rrepwd) { _alert('两次输入的密码不一样'); return false;}
-            if(rcode === '') { _alert('请输入验证码'); return false;}
+            var pwd = $('#rpwd').val();
+            var repwd = $('#rrepwd').val();
+            var account = $('#raccount').val();
+            var code = $('#rcode').val();
+            if(account === '') { _alert('请输入登录账号'); return false;}
+            if(pwd === '') { _alert('请输入登录密码'); return false;}
+            if(repwd === '') { _alert('请再次输入登录密码'); return false;}
+            if(pwd !== repwd) { _alert('两次输入的密码不一样'); return false;}
+            if(code === '') { _alert('请输入验证码'); return false;}
             //$('#btreg').attr('disabled','true');
             $.ajax({ 
                     type: "post", 
                     url: "{:U('Admin/Index/register','','')}",
-                    data: {account: raccount, pwd : rpwd, code: rcode,repwd: rrepwd},
+                    data: {account: account, pwd : pwd, code: code,repwd: repwd},
                     dataType: "json", 
                     success: function (json) { 
                             if(json.code == 1)

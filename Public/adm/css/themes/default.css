@@ -67,7 +67,8 @@
   color: #FFFFFF;
 }
 .navbar .nav.navbar-nav.pull-right {
-  min-width: 300px;
+  //min-width: 300px;
+  min-width: 135px;
 }
 .navbar .nav > li > a:hover,
 .navbar .nav > li > a:focus,
@@ -288,7 +289,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  margin-top: 15px;
+  margin-top: 0px;
   border-bottom: 1px solid #FFFFFF !important;
   border-top: 1px solid #FFFFFF !important;
 }
@@ -487,7 +488,7 @@
 .sidebar-menu > ul > li > ul.sub > li.active > a,
 .sidebar-menu > ul > li > ul.sub > li > a:hover,
 .sidebar-menu > ul > li > ul.sub > li.current {
-  background: #f4f4f4 !important;
+  background: #ffffff !important;
 }
 .sidebar-menu > ul > li > ul.sub > li > a:hover {
   background: #f4f4f4 !important;

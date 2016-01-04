@@ -19,6 +19,16 @@ class UsersModel extends Model {
                                 array('repwd','pwd','2次密码不一致',0,'confirm'),
                             );
     
+    protected $_auto = array ( 
+         array('pwd', 'createPwd', 3, 'callback'), 
+         array('createtime', 'time', 1, 'function') , 
+         array('lastlogintime', 'time', 3, 'function'), 
+         array('lastloginip','getip',3,'callback'),
+     );
+    
+     public function getip() {
+         return get_client_ip(1);
+     }
     /*
      * 平台登录
      * @param $account string 登录账号
@@ -48,7 +58,7 @@ class UsersModel extends Model {
      * @param $pwd string 登录密码
      * return string
      */
-    private function createPwd($pwd) {
+    public function createPwd($pwd) {
         return md5(C('APP_KEY').$pwd);
     }
 }

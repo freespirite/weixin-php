@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2015 �?12 �?29 �?12:02
+-- 生成日期: 2016 �?01 �?04 �?11:05
 -- 服务器版本: 5.6.24
 -- PHP 版本: 5.6.8
 
@@ -61,17 +61,21 @@ CREATE TABLE IF NOT EXISTS `wx_mp_set` (
 
 CREATE TABLE IF NOT EXISTS `wx_users` (
   `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `account` char(15) NOT NULL DEFAULT '',
+  `account` char(50) NOT NULL DEFAULT '',
   `pwd` char(32) NOT NULL DEFAULT '',
-  `email` char(32) NOT NULL DEFAULT '',
-  `regip` char(15) NOT NULL DEFAULT '',
-  `regdate` int(10) unsigned NOT NULL DEFAULT '0',
+  `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `lastloginip` int(10) NOT NULL DEFAULT '0',
   `lastlogintime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
-  UNIQUE KEY `account` (`account`),
-  KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- 转存表中的数据 `wx_users`
+--
+
+INSERT INTO `wx_users` (`uid`, `account`, `pwd`, `createtime`, `lastloginip`, `lastlogintime`) VALUES
+(3, 'freespirite@163.com', '38a4f7159de3ba4ab3901ff059e4d678', 1451470308, 2130706433, 1451470308);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

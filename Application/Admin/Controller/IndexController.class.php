@@ -15,7 +15,8 @@ class IndexController extends BaseController {
     public function index() {
         //$this->checkLogin();
         //$this->display('error_404');
-        echo date('Y-m-d H:i:s');exit;
+        //echo date('Y-m-d H:i:s');exit;
+        //$this->assign('data', array('a'=>'111', 'b'=> '2222'));
         $this->display();
     }
     
@@ -79,17 +80,20 @@ class IndexController extends BaseController {
 		}
          */
         $obj = new UsersModel();
-        $adminId = $obj->login($account, $pwd);
-        if(!$adminId) {
-            echo json_encode(array('code' => 2, 'msg' => '账号或密码错误'));
-        }
-        else {
-            session(C('ADMIN_SESSION'), $adminId);
-            if(intval(I('post.nologin'))) {
-                cookie(C('ADMIN_SESSION'), $adminId);
+        if($obj->create()) {
+            $uid = $obj->add();
+            if(is_numeric($uid)) {
+                session(C('ADMIN_SESSION'), I('post.account').'|'.$uid);
+//                if(intval(I('post.nologin'))) {
+//                    cookie(C('ADMIN_SESSION'), $adminId);
+//                }
+                $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
             }
-            echo json_encode(array('code' => 1, 'msg' => 'ok'));
+            else {
+                $this->ajaxReturn(array('code' => 2, 'msg' => $obj->getError()));
+            }
         }
+        $this->ajaxReturn(array('code' => 2, 'msg' => $obj->getError()));
     }
 
 
