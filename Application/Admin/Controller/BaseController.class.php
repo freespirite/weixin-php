@@ -14,7 +14,7 @@ use Common\Library\Curl;
 class BaseController extends Controller {
 
     public function _initialize(){
-        if(!in_array(ACTION_NAME, array('login', 'logout', 'imgcode', 'register')) && !$this->checkLogin()) {
+        if(!$this->checkLogin() && !in_array(ACTION_NAME, array('login', 'logout', 'imgcode', 'register'))) {
             //echo '>>>>>>>>>'.ACTION_NAME.'>'.__CLASS__.'>'.__LINE__;exit();
            redirect(U('/admin/Index/login'));
         }
@@ -26,20 +26,25 @@ class BaseController extends Controller {
      */
     public function checkLogin()
     {
-        $wxadmin = cookie(C('ADMIN_SESSION'));
-        if($wxadmin) {
-            $obj = new UserStatus;
-            $account = $obj->getAccount($wxadmin);
-            if($account) {
-                session(C('ADMIN_SESSION'), $account);
-                return TRUE;
-            }
-        }
+//        $wxadmin = cookie(C('ADMIN_SESSION'));
+//        if($wxadmin) {
+//            $obj = new UserStatus;
+//            $account = $obj->getAccount($wxadmin);
+//            if($account) {
+//                session(C('ADMIN_SESSION'), $account);
+//                return TRUE;
+//            }
+//        }
         return session(C('ADMIN_SESSION'))? TRUE: FALSE;
     }
     
-    
-    
+    public function getLoginCookie() {
+        
+    }
+
+    public function setLoginCookie() {
+        
+    }
 
     /*
     * 返回成功数据信息

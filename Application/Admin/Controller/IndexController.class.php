@@ -33,20 +33,18 @@ class IndexController extends BaseController {
             $account = trim(I('post.account'));
             $pwd = trim(I('post.pwd'));
             if(!$account || !$pwd) { echo json_encode(array('code' => 2, 'msg' => '账号或密码不能为空')); return; }
-            $adminId = $obj->login($account, $pwd);
-            if(!$adminId) {
+            if(!$obj->login($account, $pwd)) {
                 echo json_encode(array('code' => 2, 'msg' => '账号或密码错误'));
             }
             else {
-                session(C('ADMIN_SESSION'), $adminId);
-                if(intval(I('post.nologin'))) {
-                    cookie(C('ADMIN_SESSION'), $adminId);
-                }
+                session(C('ADMIN_SESSION'), $account);
+//                if(intval(I('post.nologin')) && intval(C('NO_LOGIN'))) {
+//                    cookie(C('ADMIN_SESSION'), $account, array('expire'=>C('NO_LOGIN')*24*3600,'prefix'=>'wxmp_'));
+//                }
                 echo json_encode(array('code' => 1, 'msg' => 'ok'));
             }
         }
         else {
-//            echo date('Y-m-d H:i:s');exit;
             if ($this->checkLogin()) {
                 $this->index();
                 return;
@@ -60,33 +58,11 @@ class IndexController extends BaseController {
             $this->display('reg');
             return;
         }
-        /*
-        public function tijiao(){
-		echo '000';
-			$user=new UserModel('user');
-			//dump($user);   //这里包括错误信息一切显示正常
-			if($user->create()){
-				if($user->add()){
-					$this->success('cg');
-				}else {
-					$this->error('sb');
-				}
-				dump($boo);
-				echo '111111111';
-			}else {
-				$this->error($user->getError());
-			}
-		$this->display();
-		}
-         */
         $obj = new UsersModel();
         if($obj->create()) {
             $uid = $obj->add();
             if(is_numeric($uid)) {
                 session(C('ADMIN_SESSION'), I('post.account').'|'.$uid);
-//                if(intval(I('post.nologin'))) {
-//                    cookie(C('ADMIN_SESSION'), $adminId);
-//                }
                 $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
             }
             else {

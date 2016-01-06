@@ -30,7 +30,7 @@ return array(
     
     'APP_KEY'               => '24638cfe066a05532b9220bcf38308a5',
     
-    'NO_LOGIN'              => 10,    //免登陆时间（天）
+    'NO_LOGIN'              => 0,    //免登陆时间（天）
 
     'DB_TYPE'               =>  'mysql',     // 数据库类型
     'DB_HOST'               =>  'localhost', // 服务器地址
