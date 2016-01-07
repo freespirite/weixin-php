@@ -47,8 +47,8 @@
                                   <h3 class="form-title">验证码</h3>
                                   <div class="form-inline"> 
                                     <i class="fa fa-lock"></i>
-                                    <input type="text" id="code" placeholder="验证码" style="width:150px;height:30px" maxlength="4">
-                                    <img src="{:U('Admin/Index/imgcode')}" id="imgcode" width="100" height="35">
+                                    <input type="text" id="code" placeholder="验证码" style="width:50%;height:30px" maxlength="4">
+                                    <img src="{:U('Admin/Index/imgcode')}" id="imgcode" width="90" height="35">
                                   </div>
                                   <div class="form-actions">
                                       <?php if(C('NO_LOGIN')) {?>
@@ -99,8 +99,8 @@
                                   <h3 class="form-title">验证码</h3>
                                   <div class="form-inline"> 
                                       <i class="fa fa-lock"></i>
-                                      <input type="text" id="rcode" placeholder="验证码" style="width:150px;height:30px" maxlength="4">
-                                      <img src="{:U('Admin/Index/imgcode')}" id="rimgcode" width="100" height="35">
+                                      <input type="text" id="rcode" placeholder="验证码" style="width:50%;height:30px" maxlength="4">
+                                      <img src="{:U('Admin/Index/imgcode')}" id="rimgcode" width="90" height="35">
                                   </div>
                                   <div class="form-actions">
                                       <button type="submit" id="btreg" class="btn btn-danger">提交注册</button>

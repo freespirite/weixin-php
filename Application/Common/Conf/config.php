@@ -3,7 +3,7 @@ return array(
     'ADM_TITLE' => 'GROUPS管理平台',
     //'配置项'=>'配置值'
     'TMPL_TEMPLATE_SUFFIX'=>'.php',
-
+    
     //'URL_CASE_INSENSITIVE'=>true,
 
     //'URL_ROUTER_ON' => true,
@@ -18,7 +18,7 @@ return array(
     ),
     
     'ADMIN_SESSION'     => 'wxadmin',
-    'DEFAULT_MODULE'    => 'Home',
+    'DEFAULT_MODULE'    => 'Admin',
 
     'SITE_URL'          => 'http://localhost/gdsell/weixin-php/Public/index.php',//网站地址
 
@@ -36,7 +36,7 @@ return array(
     'DB_HOST'               =>  'localhost', // 服务器地址
     'DB_NAME'               =>  'weixin',          // 数据库名
     'DB_USER'               =>  'root',      // 用户名
-    'DB_PWD'                =>  '123456',          // 密码
+    'DB_PWD'                =>  '5504392',          // 密码
     'DB_PORT'               =>  '3306',        // 端口
     'DB_PREFIX'             =>  'wx_',    // 数据库表前缀
     'DB_PARAMS'             =>  array(), // 数据库连接参数

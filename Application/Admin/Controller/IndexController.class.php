@@ -49,12 +49,14 @@ class IndexController extends BaseController {
                 $this->index();
                 return;
             }
+            layout(FALSE);
             $this->display('login');
         }
     }
     
     public function register() {
         if (!IS_POST){
+            layout(FALSE);
             $this->display('reg');
             return;
         }
@@ -62,7 +64,7 @@ class IndexController extends BaseController {
         if($obj->create()) {
             $uid = $obj->add();
             if(is_numeric($uid)) {
-                session(C('ADMIN_SESSION'), I('post.account').'|'.$uid);
+                session(C('ADMIN_SESSION'), I('post.account'));
                 $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
             }
             else {
@@ -231,7 +233,7 @@ class IndexController extends BaseController {
     public function logout() {
         session(C('ADMIN_SESSION'), NULL);
         //echo '>>>>>>>>>'.ACTION_NAME.'>'.__CLASS__.'>'.__LINE__;//exit();
-        redirect(U('/admin/Index/login'));
+        redirect(U('admin/Index/login'));
     }
     
     /*
