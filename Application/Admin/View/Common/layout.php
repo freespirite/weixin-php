@@ -161,7 +161,7 @@
 	<!-- CUSTOM SCRIPT -->
 	<script src="./adm/js/script.js"></script>
 	<script>
-		jQuery(document).ready(function() {		
+		jQuery(document).ready(function() {
 			App.setPage("widgets_box");  //Set current page
 			App.init(); //Initialise plugins and elements
 		});
