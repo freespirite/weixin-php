@@ -15,6 +15,19 @@
                                 </li>
                                 <li class="has-sub">
                                     <a href="javascript:;" class="">
+                                    <i class="fa fa-desktop fa-fw"></i> <span class="menu-text">账号设置</span>
+                                    <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub">
+                                        <li><a class="" href="elements.html"><span class="sub-menu-text">公众号设置</span></a></li>
+                                        <li><a class="" href="notifications.html"><span class="sub-menu-text">自动回复</span></a></li>
+                                        <li><a class="" href="buttons_icons.html"><span class="sub-menu-text">群发设置</span></a></li>
+                                        <li><a class="" href="sliders_progress.html"><span class="sub-menu-text">消息模板</span></a></li>
+                                    </ul>
+                                </li>
+                                
+                                <li class="has-sub">
+                                    <a href="javascript:;" class="">
                                     <i class="fa fa-desktop fa-fw"></i> <span class="menu-text">消息管理</span>
                                     <span class="arrow"></span>
                                     </a>

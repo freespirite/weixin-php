@@ -8,17 +8,20 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<!-- STYLESHEETS --><!--[if lt IE 9]><script src="js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
-	<link rel="stylesheet" type="text/css" href="./adm/css/cloud-admin.css" >
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/css/cloud-admin.css" >
 	
-	<link href="./adm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<link href="__PUBLIC__/adm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<!-- DATE RANGE PICKER -->
-	<link rel="stylesheet" type="text/css" href="./adm/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/js/bootstrap-daterangepicker/daterangepicker-bs3.css" />
 	<!-- UNIFORM -->
-	<link rel="stylesheet" type="text/css" href="./adm/js/uniform/css/uniform.default.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/js/uniform/css/uniform.default.min.css" />
 	<!-- ANIMATE -->
-	<link rel="stylesheet" type="text/css" href="./adm/css/animatecss/animate.min.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/css/animatecss/animate.min.css" />
 	<!-- FONTS -->
 	<!--<link href='http://fonts.useso.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>-->
+        <style>
+            #imgcode,#rimgcode { cursor: pointer; }
+        </style>
 </head>
 <body class="login">	
 	<!-- PAGE -->
@@ -123,18 +126,23 @@
 	<!-- JAVASCRIPTS -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<!-- JQUERY -->
-	<script src="./adm/js/jquery/jquery-2.0.3.min.js"></script>
+	<script src="__PUBLIC__/adm/js/jquery/jquery-2.0.3.min.js"></script>
 	<!-- JQUERY UI-->
-	<script src="./adm/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="__PUBLIC__/adm/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<!-- BOOTSTRAP -->
-	<script src="./adm/bootstrap-dist/js/bootstrap.min.js"></script>
+	<script src="__PUBLIC__/adm/bootstrap-dist/js/bootstrap.min.js"></script>
 	
 	
 	<!-- UNIFORM -->
-	<script type="text/javascript" src="./adm/js/uniform/jquery.uniform.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/adm/js/uniform/jquery.uniform.min.js"></script>
 	<script type="text/javascript">
         function swapScreen(id) {
             _alert('');
+            if(id == 'login') {
+                $('#imgcode').attr("src","{:U('Admin/Index/imgcode')}");
+            } else {
+                $('#rimgcode').attr("src","{:U('Admin/Index/imgcode')}");
+            }
             jQuery('.visible').removeClass('visible animated fadeInUp');
             jQuery('#'+id).addClass('visible animated fadeInUp');
         }
