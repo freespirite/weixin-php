@@ -18,6 +18,8 @@ class BaseController extends Controller {
             //echo '>>>>>>>>>'.ACTION_NAME.'>'.__CLASS__.'>'.__LINE__;exit();
            redirect(U('/admin/Index/login'));
         }
+        $this->assign('controller', strtolower(CONTROLLER_NAME));
+        $this->assign('action', strtolower(ACTION_NAME));
     }
     
     /*

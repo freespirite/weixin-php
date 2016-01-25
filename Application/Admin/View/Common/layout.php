@@ -132,7 +132,8 @@
 	<!-- SLIMSCROLL -->
 	<script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
 	<!-- SLIMSCROLL -->
-	<script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script><script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-slimScroll-1.3.0/jquery.slimscroll.min.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-slimScroll-1.3.0/slimScrollHorizontal.min.js"></script>
 	<!-- BLOCK UI -->
 	<script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-BlockUI/jquery.blockUI.min.js"></script>
 	<!-- SPARKLINES -->
@@ -143,11 +144,11 @@
 	<!-- FLOT CHARTS -->
 	<script src="__PUBLIC__/adm/js/flot/jquery.flot.min.js"></script>
 	<script src="__PUBLIC__/adm/js/flot/jquery.flot.time.min.js"></script>
-    <script src="__PUBLIC__/adm/js/flot/jquery.flot.selection.min.js"></script>
+        <script src="__PUBLIC__/adm/js/flot/jquery.flot.selection.min.js"></script>
 	<script src="__PUBLIC__/adm/js/flot/jquery.flot.resize.min.js"></script>
-    <script src="__PUBLIC__/adm/js/flot/jquery.flot.pie.min.js"></script>
-    <script src="__PUBLIC__/adm/js/flot/jquery.flot.stack.min.js"></script>
-    <script src="__PUBLIC__/adm/js/flot/jquery.flot.crosshair.min.js"></script>
+        <script src="__PUBLIC__/adm/js/flot/jquery.flot.pie.min.js"></script>
+        <script src="__PUBLIC__/adm/js/flot/jquery.flot.stack.min.js"></script>
+        <script src="__PUBLIC__/adm/js/flot/jquery.flot.crosshair.min.js"></script>
 	<!-- TODO -->
 	<script type="text/javascript" src="__PUBLIC__/adm/js/jquery-todo/js/paddystodolist.js"></script>
 	<!-- TIMEAGO -->
@@ -160,11 +161,18 @@
 	<script type="text/javascript" src="__PUBLIC__/adm/js/gritter/js/jquery.gritter.min.js"></script>
 	<!-- CUSTOM SCRIPT -->
 	<script src="__PUBLIC__/adm/js/script.js"></script>
+        <?php
+        if(!isset($pageSet)) {
+            $pageSet = 'widgets_box';
+        }
+        ?>
 	<script>
-		jQuery(document).ready(function() {
-			App.setPage("widgets_box");  //Set current page
-			App.init(); //Initialise plugins and elements
-		});
+            jQuery(document).ready(function() {
+                    App.setPage("<?php echo $pageSet;?>");  //Set current page
+                    App.setActive("<?php echo $controller;?>","<?php echo $action;?>");
+                    App.init(); //Initialise plugins and elements
+                    
+            });
 	</script>
 	<!-- /JAVASCRIPTS -->
 </body>

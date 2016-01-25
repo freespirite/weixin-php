@@ -7,26 +7,6 @@
 
                             <!-- SIDEBAR MENU -->
                             <ul>
-                                <?php
-                                foreach(C('MENU_ARRAY') as $k => $v) {
-                                    echo '<li id="c'.$k.'">';
-                                    $link = '<i class="fa fa-desktop fa-fw"></i> <span class="menu-text">'.$v['title'].'</span><span class="arrow"></span>';
-                                    if(isset($v['url'])) {
-                                        echo '<a href="'.$v['url'].'">'.$link.'</a></li>';
-                                    }
-                                    else {
-                                        echo '<a href="javascript:;" class="">'.$link.'</a></li>';
-                                    }
-                                    
-                                    if(isset($v['sub'])) {
-                                        echo '<ul class="sub">';
-                                        foreach($v['sub'] as $ks => $vs) {
-                                            echo '<li id="c'.$k.'_'.$ks.'"><a href="'.$vs['url'].'"><span class="sub-menu-text">'.$vs['title'].'</span></a></li>';
-                                        }
-                                        echo '</ul>';
-                                    }
-                                }
-                                ?>
                                 <li id="cindex">
                                     <a href="<?php echo U('admin/index/index');?>">
                                     <i class="fa fa-tachometer fa-fw"></i> <span class="menu-text">首页</span>

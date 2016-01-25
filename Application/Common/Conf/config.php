@@ -53,5 +53,11 @@ return array(
     'MEMCACHE_PORT'         => '',
     'DATA_CACHE_TIMEOUT'    => '',
     */
+    
+    /*
+     * freespirite
+    AppID(应用ID)wx3152faa31d086ea4
+    AppSecret(应用密钥)b7bfe46a0fdecee7368f8741d547170a
+     */
 );
 
