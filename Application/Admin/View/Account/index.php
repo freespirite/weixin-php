@@ -1,3 +1,9 @@
+<?php
+$aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
+?>
+<style>
+    .error {color: red;}
+</style>
 <!-- PAGE HEADER-->
 <div class="row">
         <div class="col-sm-12">
@@ -12,13 +18,13 @@
                                         <a href="<?php echo U('admin/index/index');?>">首页</a>
                                 </li>
                                 <li>
-                                        <a href="#">Form Elements</a>
+                                        <a href="#"><?php echo $aryDaohang['title'];?></a>
                                 </li>
-                                <li>Forms</li>
+                                <li><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></li>
                         </ul>
                         <!-- /BREADCRUMBS -->
                         <div class="clearfix">
-                                <h3 class="content-title pull-left">Forms</h3>
+                                <h3 class="content-title pull-left"><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></h3>
                         </div>
                         <div class="description">Form Elements and Features</div>
                 </div>
@@ -29,75 +35,30 @@
 <div class="row">
         <div class="col-md-12">
                 <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-11">
                                 <div class="box border primary">
-                                        <div class="box-title">
-                                                <h4><i class="fa fa-bars"></i>Form controls</h4>
-                                                <div class="tools hidden-xs">
-                                                        <a href="#box-config" data-toggle="modal" class="config">
-                                                                <i class="fa fa-cog"></i>
-                                                        </a>
-                                                        <a href="javascript:;" class="reload">
-                                                                <i class="fa fa-refresh"></i>
-                                                        </a>
-                                                        <a href="javascript:;" class="collapse">
-                                                                <i class="fa fa-chevron-up"></i>
-                                                        </a>
-                                                        <a href="javascript:;" class="remove">
-                                                                <i class="fa fa-times"></i>
-                                                        </a>
-                                                </div>
-                                        </div>
+                                        
                                         <div class="box-body big">
-                                                <h3 class="form-title">Supported controls</h3>
-                                                <form class="form-horizontal" role="form">
+                                                <h3 class="form-title">开发者ID</h3>
+                                                <form class="form-horizontal" novalidate="novalidate" method="post" >
                                                   <div class="form-group">
-                                                        <label class="col-sm-3 control-label">Inputs</label>
+                                                        <label class="col-sm-3 control-label">AppID(应用ID)
+                                                        <span class="required">*</span></label>
                                                         <div class="col-sm-9">
-                                                          <input type="text" class="form-control" placeholder="Text input">
+                                                            <input type="text" name="appid" id="appid" class="form-control" placeholder="应用ID" maxlength="20">
+                                                            <span class="error-span"></span>
                                                         </div>
                                                   </div>
                                                   <div class="form-group">
-                                                        <label class="col-sm-3 control-label">Textarea</label>
+                                                        <label class="col-sm-3 control-label">AppSecret(应用密钥)
+                                                            <span class="required">*</span></label>
                                                         <div class="col-sm-9">
-                                                         <textarea class="form-control" rows="3"></textarea>
+                                                            <input type="text" name="appsecret" id="appsecret" class="form-control" placeholder="应用秘钥" maxlength="32">
+                                                          <span class="error-span"></span>
                                                         </div>
                                                   </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">Inline checkboxes</label>
-                                                        <div class="col-sm-9">
-                                                         <label class="checkbox-inline">
-                                                          <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
-                                                        </label>
-                                                        <label class="checkbox-inline">
-                                                          <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
-                                                        </label>
-                                                        <label class="checkbox-inline">
-                                                          <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
-                                                        </label>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">Selects</label>
-                                                        <div class="col-sm-9">
-                                                         <select class="form-control">
-                                                          <option>1</option>
-                                                          <option>2</option>
-                                                          <option>3</option>
-                                                          <option>4</option>
-                                                          <option>5</option>
-                                                        </select>
-                                                        <div class="divide-20"></div>
-                                                        <select multiple class="form-control">
-                                                          <option>1</option>
-                                                          <option>2</option>
-                                                          <option>3</option>
-                                                          <option>4</option>
-                                                          <option>5</option>
-                                                        </select>
-                                                        </div>
-                                                  </div>
-                                                 </form>
+                                                  <button type="submit" class="btn btn-success">保存</button>
+                                                </form>
                                         </div>
                                 </div>
 
@@ -109,3 +70,43 @@
 </div>
 <!-- /FORMS -->
 <div class="separator"></div>
+<script type="text/javascript">
+$(function(){
+    jQuery.validator.addMethod("checkappid", function(value, element) {  
+        //alert(element.placeholder);
+        //var rs = this.optional(element) || value.length < 18;
+//        if(this.optional(element) || (value.length < 18)) {
+//            element.style.border-color = "red";
+//            return true;
+//        }
+//alert(this.optional(element));
+        return this.optional(element) || (value.length <= 18);
+    }, "请输入正确的应用ID"); 
+    
+    var validate = $(".form-horizontal").validate({
+        //debug: true, //调试模式取消submit的默认提交功能    
+//        submitHandler: function(form){   //表单提交句柄,为一回调函数，带一个参数：form   
+//            alert("提交表单");   
+//            //form.submit();   //提交表单   
+//        },   
+
+        rules:{
+            appid:{
+                required: true
+            },
+            appsecret: {
+                required: true
+            }
+        },
+        //如果验证控件没有message，将调用默认的信息
+        messages:{
+            appid: "应用ID不能为空",
+            appsecret: "应用秘钥不能为空"
+
+        }
+
+    });    
+    
+    
+});
+</script>

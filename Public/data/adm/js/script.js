@@ -3228,7 +3228,7 @@ var App = function () {
 				//handleAutosize(); //Function to handle textarea autosize
 				//handleCountable(); //Function to handle char count
 				//handleSelect2(); //Function to handle select2
-				//handleUniform();	//Function to handle uniform inputs
+				handleUniform();	//Function to handle uniform inputs
 				//handleTimeAgo(); //Function to handle timestamps
 			}
 			if (App.isPage("rich_text_editors")) {
@@ -3361,7 +3361,7 @@ var App = function () {
         blockUI: function (el, loaderOnTop) {
             lastBlockedUI = el;
             jQuery(el).block({
-                message: '<img src="./img/loaders/12.gif" align="absmiddle">',
+                message: '<img src="../../data/adm/img/loaders/12.gif" align="absmiddle">',
                 css: {
                     border: 'none',
                     padding: '2px',

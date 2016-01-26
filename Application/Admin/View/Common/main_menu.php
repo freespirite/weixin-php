@@ -9,77 +9,25 @@
                             <ul>
                                 <?php
                                 foreach(C('MENU_ARRAY') as $k => $v) {
-                                    echo '<li id="c'.$k.'">';
-                                    $link = '<i class="fa fa-desktop fa-fw"></i> <span class="menu-text">'.$v['title'].'</span><span class="arrow"></span>';
-                                    if(isset($v['url'])) {
-                                        echo '<a href="'.$v['url'].'">'.$link.'</a></li>';
-                                    }
-                                    else {
-                                        echo '<a href="javascript:;" class="">'.$link.'</a></li>';
-                                    }
+                                    $hasSub = isset($v['sub'])? TRUE: FALSE;
+                                    echo '<li id="c'.$k.'"'.($hasSub? ' class="has-sub"': '').'>';
+                                    $link = '<i class="fa '.$v['flag'].' fa-fw"></i>'
+                                            . '<span class="menu-text">'.$v['title'].'</span><span class="arrow"></span>';
                                     
-                                    if(isset($v['sub'])) {
+                                    if($hasSub) {
+                                        echo '<a href="javascript:;" class="">'.$link.'</a>';
                                         echo '<ul class="sub">';
                                         foreach($v['sub'] as $ks => $vs) {
-                                            echo '<li id="c'.$k.'_'.$ks.'"><a href="'.$vs['url'].'"><span class="sub-menu-text">'.$vs['title'].'</span></a></li>';
+                                            echo '<li id="c'.$k.'_'.$ks.'"><a href="'.U('admin/'.$k.'/'.$ks).'"><span class="sub-menu-text">'.$vs['title'].'</span></a></li>';
                                         }
-                                        echo '</ul>';
+                                        echo '</ul></li>';
+                                    }
+                                    else {
+                                        echo '<a href="'.U('admin/'.$k.'/index').'">'.$link.'</a></li>';
                                     }
                                 }
                                 ?>
-                                <li id="cindex">
-                                    <a href="<?php echo U('admin/index/index');?>">
-                                    <i class="fa fa-tachometer fa-fw"></i> <span class="menu-text">首页</span>
-                                    <span class="selected"></span>
-                                    </a>
-                                </li>
-                                <li class="has-sub" id="caccount">
-                                    <a href="javascript:;" class="">
-                                    <i class="fa fa-desktop fa-fw"></i> <span class="menu-text">账号设置</span>
-                                    <span class="arrow"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li id="caccount_index"><a class="" href="<?php echo U('admin/account/index');?>"><span class="sub-menu-text">公众号设置</span></a></li>
-                                        <li><a class="" href="notifications.html"><span class="sub-menu-text">自动回复</span></a></li>
-                                        <li><a class="" href="buttons_icons.html"><span class="sub-menu-text">群发设置</span></a></li>
-                                        <li><a class="" href="sliders_progress.html"><span class="sub-menu-text">消息模板</span></a></li>
-                                    </ul>
-                                </li>
                                 
-                                <li class="has-sub">
-                                    <a href="javascript:;" class="">
-                                    <i class="fa fa-desktop fa-fw"></i> <span class="menu-text">消息管理</span>
-                                    <span class="arrow"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a class="" href="elements.html"><span class="sub-menu-text">消息列表</span></a></li>
-                                        <li><a class="" href="notifications.html"><span class="sub-menu-text">自动回复</span></a></li>
-                                        <li><a class="" href="buttons_icons.html"><span class="sub-menu-text">群发设置</span></a></li>
-                                        <li><a class="" href="sliders_progress.html"><span class="sub-menu-text">消息模板</span></a></li>
-                                        <!--<li class="has-sub-sub">
-                                            <a href="javascript:;" class=""><span class="sub-menu-text">回复设置</span>
-                                            <span class="arrow"></span>
-                                            </a>
-                                            <ul class="sub-sub">
-                                                <li><a class="" href="#"><span class="sub-sub-menu-text">自动回复设置</span></a></li>
-                                                <li><a class="" href="#"><span class="sub-sub-menu-text">Item 2</span></a></li>
-                                            </ul>
-                                        </li>-->
-                                    </ul>
-                                </li>
-
-                                <li class="has-sub">
-                                    <a href="javascript:;" class="">
-                                    <i class="fa fa-bar-chart-o fa-fw"></i> <span class="menu-text">数据统计</span>
-                                    <span class="arrow"></span>
-                                    </a>
-                                    <ul class="sub">
-                                        <li><a class="" href="#"><span class="sub-sub-menu-text">用户分析</span></a></li>
-                                        <li><a class="" href="#"><span class="sub-sub-menu-text">图文分析</span></a></li>
-                                        <li><a class="" href="#"><span class="sub-sub-menu-text">菜单分析</span></a></li>
-                                        <li><a class="" href="#"><span class="sub-sub-menu-text">消息分析</span></a></li>
-                                    </ul>
-                                </li>
                             </ul>
                             <!-- /SIDEBAR MENU -->
                         </div>
