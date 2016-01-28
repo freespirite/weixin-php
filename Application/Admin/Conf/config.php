@@ -19,6 +19,13 @@ return array(
                     'password' => array('title' => '登录密码修改'),
                 ),
             ),
+        'article' => array(
+                'title'=> '素材管理',
+                'flag' => 'fa-picture-o',
+                'sub' => array(
+                    'index' => array('title'=> '我的素材库'),
+                ),
+            ),
         'message' => array(
                 'title'=> '消息管理',
                 'flag' => 'fa-pencil-square-o',

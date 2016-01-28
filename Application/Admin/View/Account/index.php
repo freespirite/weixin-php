@@ -42,6 +42,14 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                                 <h3 class="form-title">开发者ID</h3>
                                                 <form class="form-horizontal" novalidate="novalidate" method="post" >
                                                   <div class="form-group">
+                                                        <label class="col-sm-3 control-label">公众号名称
+                                                            <span class="required">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="name" id="name" class="form-control" placeholder="公众号名称" maxlength="10">
+                                                          <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
                                                         <label class="col-sm-3 control-label">AppID(应用ID)
                                                         <span class="required">*</span></label>
                                                         <div class="col-sm-9">
@@ -57,6 +65,13 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                                           <span class="error-span"></span>
                                                         </div>
                                                   </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-3 control-label">公众号描述</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="remark" id="remark" class="form-control" placeholder="公众号描述" maxlength="32">
+                                                          <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
                                                   <button type="submit" class="btn btn-success">保存</button>
                                                 </form>
                                         </div>
@@ -64,8 +79,44 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 
                         </div>
                 </div>
-                <div class="separator"></div>
-
+                
+                <div class="row">
+                    <div class="col-md-11">
+                        <!-- BOX -->
+                        <div class="box border blue">
+                                <div class="box-title">
+                                        <h4><i class="fa fa-table"></i>我的公众号列表</h4>
+                                </div>
+                                <div class="box-body">
+                                        <table class="table table-striped">
+                                                <thead>
+                                                  <tr>
+                                                        <th>名称</th>
+                                                        <th>APPID</th>
+                                                        <th>描述</th>
+                                                        <th>操作</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php 
+                                                foreach($list as $row) {
+                                                ?>
+                                                  <tr>
+                                                        <td><?php echo $row['name'];?></td>
+                                                        <td><?php echo $row['appid'];?></td>
+                                                        <td><?php echo $row['remark'];?></td>
+                                                        <td>删除</td>
+                                                  </tr>
+                                                <?php
+                                                }
+                                                ?>
+                                                </tbody>
+                                          </table>
+                                </div>
+                        </div>
+                        <!-- /BOX -->
+                </div>
+                </div>
         </div>
 </div>
 <!-- /FORMS -->
@@ -85,28 +136,60 @@ $(function(){
     
     var validate = $(".form-horizontal").validate({
         //debug: true, //调试模式取消submit的默认提交功能    
-//        submitHandler: function(form){   //表单提交句柄,为一回调函数，带一个参数：form   
-//            alert("提交表单");   
-//            //form.submit();   //提交表单   
-//        },   
+        submitHandler: function(form) {   //表单提交句柄,为一回调函数，带一个参数：form   
+            //alert("提交表单");
+            $.ajax({ 
+                type: "post", 
+                url: "{:U('Admin/Account/index','','')}",
+                data: {name: $('#name').val(), appid : $('#appid').val(), appsecret: $('#appsecret').val(), remark: $('#remark').val()},
+                dataType: "json", 
+                success: function (json) { 
+                    if(json.code == 1) {
+                        bootbox.alert("公众号绑定成功！");
+                        $('#name').val(''); $('#appid').val('');
+                        $('#appsecret').val('');$('#remark').val('');
+                        showlist();
+                    } else {
+                        _alert(json.msg);
+                    }
+                }, 
+                error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                        _alert(errorThrown);
+                }
+            });
+        },
 
         rules:{
-            appid:{
-                required: true
-            },
-            appsecret: {
-                required: true
-            }
+            name: {required: true},
+            appid:{required: true},
+            appsecret: {required: true}
         },
         //如果验证控件没有message，将调用默认的信息
         messages:{
+            name: "公众号名称不能为空",
             appid: "应用ID不能为空",
             appsecret: "应用秘钥不能为空"
-
         }
-
     });    
+    function showlist() {
+        //$('#table > tbody').html('');
+        var str = new Array();
+        str.push("<td>" + $("#name").val() + "</td>");
+        str.push("<td>" + $("#appid").val() + "</td>");
+        str.push("<td>" + $("#appsecret").val() + "</td>");
+        str.push("<td>" + $("#remark").val() + "</td>");
+        $('#table > tbody').append(str.join(""));
+    }
     
+    function showlist2() {
+        //$('#table > tbody').html('');
+        var str = new Array();
+        str.push("<td>1</td>");
+        str.push("<td>3</td>");
+        str.push("<td>4</td>");
+        str.push("<td>5</td>");
+        $('#table > tbody').append(str.join(""));
+    }
     
 });
 </script>

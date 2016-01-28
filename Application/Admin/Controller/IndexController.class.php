@@ -33,11 +33,12 @@ class IndexController extends BaseController {
             $account = trim(I('post.account'));
             $pwd = trim(I('post.pwd'));
             if(!$account || !$pwd) { echo json_encode(array('code' => 2, 'msg' => '账号或密码不能为空')); return; }
-            if(!$obj->login($account, $pwd)) {
+            $info = $obj->login($account, $pwd);
+            if(!$info) {
                 echo json_encode(array('code' => 2, 'msg' => '账号或密码错误'));
             }
             else {
-                session(C('ADMIN_SESSION'), $account);
+                session(C('ADMIN_SESSION'), array('name'=> $info['account'], 'uid'=>$info['uid']));
 //                if(intval(I('post.nologin')) && intval(C('NO_LOGIN'))) {
 //                    cookie(C('ADMIN_SESSION'), $account, array('expire'=>C('NO_LOGIN')*24*3600,'prefix'=>'wxmp_'));
 //                }

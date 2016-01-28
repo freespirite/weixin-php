@@ -36,9 +36,9 @@ class UsersModel extends Model {
      * return array
      */
     public function login($account, $pwd) {
-        $row = $this->where('`account`="%s"', array($account))->find();
+        $row = $this->where('`account`="%s"', array($account))->field('uid,account,pwd')->find();
         if(!$row) { return FALSE; }
-        return $this->createPwd($pwd) === $row['pwd']? $row['account']: 0;
+        return $this->createPwd($pwd) === $row['pwd']? $row: 0;
     }
     
     

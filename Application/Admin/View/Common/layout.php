@@ -31,7 +31,8 @@
 	<script src="__PUBLIC__/adm/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
 	<!-- BOOTSTRAP -->
 	<script src="__PUBLIC__/adm/bootstrap-dist/js/bootstrap.min.js"></script>
-	
+	<!-- BOOTBOX -->
+	<script type="text/javascript" src="__PUBLIC__/adm/js/bootbox/bootbox.min.js"></script>
 		
 	<!-- DATE RANGE PICKER -->
 	<script src="__PUBLIC__/adm/js/bootstrap-daterangepicker/moment.min.js"></script>
@@ -103,7 +104,7 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown user" id="header-user">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="username"><?php echo session(C('ADMIN_SESSION'));?></span>
+                            <span class="username"><?php echo session(C('ADMIN_SESSION'))['name'];?></span>
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">

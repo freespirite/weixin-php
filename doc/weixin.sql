@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2016 �?01 �?04 �?11:05
+-- 生成日期: 2016 �?01 �?28 �?11:37
 -- 服务器版本: 5.6.24
 -- PHP 版本: 5.6.8
 
@@ -41,17 +41,27 @@ CREATE TABLE IF NOT EXISTS `wx_login_status` (
 --
 
 CREATE TABLE IF NOT EXISTS `wx_mp_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL COMMENT '用户id号',
-  `appid` char(15) NOT NULL DEFAULT '' COMMENT '公众号身份的唯一标识',
+  `name` char(60) NOT NULL COMMENT '微信号名称',
+  `appid` char(32) NOT NULL DEFAULT '' COMMENT '公众号应用ID',
   `mchid` char(32) NOT NULL DEFAULT '' COMMENT '受理商ID，身份标识',
   `key` char(32) NOT NULL DEFAULT '' COMMENT '商户支付密钥Key',
-  `appsecret` char(30) NOT NULL DEFAULT '' COMMENT 'JSAPI接口中获取openid',
+  `appsecret` char(32) NOT NULL DEFAULT '' COMMENT '公众号应用秘钥',
   `sslcert` char(16) NOT NULL DEFAULT '' COMMENT '证书绝对路径',
   `sslkey` char(16) NOT NULL DEFAULT '' COMMENT '证书绝对路径',
+  `remark` varchar(300) NOT NULL DEFAULT '' COMMENT '公众号描述',
   `createtime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatetime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户公众号设置';
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户公众号设置' AUTO_INCREMENT=2 ;
+
+--
+-- 转存表中的数据 `wx_mp_set`
+--
+
+INSERT INTO `wx_mp_set` (`id`, `uid`, `name`, `appid`, `mchid`, `key`, `appsecret`, `sslcert`, `sslkey`, `remark`, `createtime`, `updatetime`) VALUES
+(1, 3, '腾狼技术微信推广活动', 'wx3152faa31d086ea4', '', '', 'b7bfe46a0fdecee7368f8741d547170a', '', '', '测试的公众号', 0, 0);
 
 -- --------------------------------------------------------
 

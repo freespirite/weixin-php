@@ -11,18 +11,39 @@ class AccountController extends BaseController {
     
     public function index() {
         if (!IS_POST){
-            $this->assign('pageSet', 'wizards_validations');
+            //$this->assign('pageSet', 'wizards_validations');
+            $this->_list();
             $this->display();
             return;
         }
+        $data['uid'] = session(C('ADMIN_SESSION'))['uid'];
         $data['appid'] = trim(I('post.appid'));
         $data['appsecret'] = trim(I('post.appsecret'));
-        $rs = D('mp_set')->add($data);
+        $data['name'] = trim(I('post.name'));
+        $data['remark'] = trim(I('post.remark'));
+        $obj = new Usermpset();
+        $rs = $obj->add($data);
         if($rs) {
-            exit('success');
+            $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
         }
         else {
-            exit('error');
+            $this->ajaxReturn(array('code' => 2, 'msg' => $obj->getError()));
         }
+    }
+    
+    /*
+     * 返回平台列表
+     */
+    private function _list() {
+        //$page = intval(I('get.p'));
+        //$page = $page? $page: 1;
+        //$size = in_array(I('get.size'), array(10, 15, 30))? $size: 10;
+        $obj = new Usermpset();
+        $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid']);
+        $this->assign('list', $list);
+        
+        //$objPage = $this->getpage($obj->getCount(), $size);
+        //$this->assign('page', $objPage->showAce('page/plist'));// 赋值分页输出
+        //$this->display('plist');
     }
 }

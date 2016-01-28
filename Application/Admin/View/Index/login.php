@@ -125,108 +125,108 @@
 	<!--/PAGE -->
 	<!-- JAVASCRIPTS -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<!-- JQUERY -->
-	<script src="__PUBLIC__/adm/js/jquery/jquery-2.0.3.min.js"></script>
-	<!-- JQUERY UI-->
-	<script src="__PUBLIC__/adm/js/jquery-ui-1.10.3.custom/js/jquery-ui-1.10.3.custom.min.js"></script>
-	<!-- BOOTSTRAP -->
-	<script src="__PUBLIC__/adm/bootstrap-dist/js/bootstrap.min.js"></script>
-	
-	
-	<!-- UNIFORM -->
-	<script type="text/javascript" src="__PUBLIC__/adm/js/uniform/jquery.uniform.min.js"></script>
-	<script type="text/javascript">
-        function swapScreen(id) {
-            _alert('');
-            if(id == 'login') {
-                $('#imgcode').attr("src","{:U('Admin/Index/imgcode')}");
-            } else {
-                $('#rimgcode').attr("src","{:U('Admin/Index/imgcode')}");
-            }
-            jQuery('.visible').removeClass('visible animated fadeInUp');
-            jQuery('#'+id).addClass('visible animated fadeInUp');
-        }
-	
-        $(function(){
-            $('#imgcode').click(function(){
-                $(this).attr("src","{:U('Admin/Index/imgcode')}");
-            });
-            $('#rimgcode').click(function(){
-                $(this).attr("src","{:U('Admin/Index/imgcode')}");
-            });
+    <!-- JQUERY -->
+    <script src="__PUBLIC__/adm/js/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('#imgcode').click(function(){
+            var n = parseInt(Math.random()*1000);
+            $(this).attr("src","{:U('Admin/Index/imgcode')}?t="+n);
         });
-        function postlogin() {
-            var pwd = $('#pwd').val();
-            var account = $('#account').val();
-            var code = $('#code').val();
-            var nologin = $('#nologin').is(":checked")==true? 1: 0;
-            if(account == '') { _alert('请输入登录账号'); return false;}
-            if(pwd == '') { _alert('请输入登录密码'); return false;}
-            if(code == '') { _alert('请输入验证码'); return false;}
-            //$('#btlogin').attr('disabled','true');
-            $.ajax({ 
-                    type: "post", 
-                    url: "{:U('Admin/Index/login','','')}",
-                    data: {account: account, pwd : pwd, code: code, nologin: nologin},
-                    dataType: "json", 
-                    success: function (json) { 
-                            if(json.code == 1)
-                                window.location.href="{:U('Admin/Index/index','','')}";
-                            else if(json.code == 2)
-                                _alert(json.msg);
-                            else {
-                                _alert(json.msg);
-                            }
-                            $('#code').val('');
-                            $('#imgcode').attr("src","{:U('Admin/Index/imgcode')}");
-                            $('#btlogin').removeAttr('disabled');
-                    }, 
-                    error: function (XMLHttpRequest, textStatus, errorThrown) { 
-                            _alert(errorThrown);
+        $('#rimgcode').click(function(){
+            var n = parseInt(Math.random()*1000);
+            $(this).attr("src","{:U('Admin/Index/imgcode')}?t="+n);
+        });
+    });
+    function swapScreen(id) {
+        _alert('');
+        var n = parseInt(Math.random()*1000);
+        if(id == 'login') {
+            $('#imgcode').attr("src","{:U('Admin/Index/imgcode')}?t="+n);
+        } else {
+            $('#rimgcode').attr("src","{:U('Admin/Index/imgcode')}?t="+n);
+        }
+        jQuery('.visible').removeClass('visible animated fadeInUp');
+        jQuery('#'+id).addClass('visible animated fadeInUp');
+    }
+    function postlogin() {
+        var pwd = $('#pwd').val();
+        var account = $('#account').val();
+        var code = $('#code').val();
+        var nologin = $('#nologin').is(":checked")==true? 1: 0;
+        if(account == '') { _alert('请输入登录账号'); return false;}
+        if(pwd == '') { _alert('请输入登录密码'); return false;}
+        if(code == '') { _alert('请输入验证码'); return false;}
+        $('#btlogin').attr('disabled','true');
+        $.ajax({ 
+                type: "post", 
+                url: "{:U('Admin/Index/login','','')}",
+                data: {account: account, pwd : pwd, code: code, nologin: nologin},
+                dataType: "json", 
+                success: function (json) { 
+                    if(json.code == 1)
+                        window.location.href="{:U('Admin/Index/index','','')}";
+                    else if(json.code == 2)
+                        _alert(json.msg);
+                    else {
+                        _alert(json.msg);
                     }
-            });
-            return false;
-        }
-        
-        function postreg() {
-            var pwd = $('#rpwd').val();
-            var repwd = $('#rrepwd').val();
-            var account = $('#raccount').val();
-            var code = $('#rcode').val();
-            if(account === '') { _alert('请输入登录账号'); return false;}
-            if(pwd === '') { _alert('请输入登录密码'); return false;}
-            if(repwd === '') { _alert('请再次输入登录密码'); return false;}
-            if(pwd !== repwd) { _alert('两次输入的密码不一样'); return false;}
-            if(code === '') { _alert('请输入验证码'); return false;}
-            //$('#btreg').attr('disabled','true');
-            $.ajax({ 
-                    type: "post", 
-                    url: "{:U('Admin/Index/register','','')}",
-                    data: {account: account, pwd : pwd, code: code,repwd: repwd},
-                    dataType: "json", 
-                    success: function (json) { 
-                            if(json.code == 1)
-                                window.location.href="{:U('Admin/Index/index','','')}";
-                            else if(json.code == 2)
-                                _alert(json.msg);
-                            else {
-                                _alert(json.msg);
-                            }
-                            $('#rcode').val('');
-                            $('#rimgcode').attr("src","{:U('Admin/Index/imgcode')}");
-                            $('#btreg').removeAttr('disabled');
-                    }, 
-                    error: function (XMLHttpRequest, textStatus, errorThrown) { 
-                            _alert(errorThrown);
+                    if(json.code != 1) {
+                        var n = parseInt(Math.random()*1000);
+                        $('#code').val('');
+                        $('#imgcode').attr("src","{:U('Admin/Index/imgcode')}?t="+n);
+                        $('#btlogin').removeAttr('disabled');
                     }
-            });
-            return false;
-        }
-        
-        function _alert(msg) {
-            $('.divide-40').html("<font color=red>"+msg+"</font>");
-        }
-        </script>
-	<!-- /JAVASCRIPTS -->
+                }, 
+                error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                        _alert(errorThrown);
+                }
+        });
+        return false;
+    }
+    
+    function postreg() {
+        var pwd = $('#rpwd').val();
+        var repwd = $('#rrepwd').val();
+        var account = $('#raccount').val();
+        var code = $('#rcode').val();
+        if(account === '') { _alert('请输入登录账号'); return false;}
+        if(pwd === '') { _alert('请输入登录密码'); return false;}
+        if(repwd === '') { _alert('请再次输入登录密码'); return false;}
+        if(pwd !== repwd) { _alert('两次输入的密码不一样'); return false;}
+        if(code === '') { _alert('请输入验证码'); return false;}
+        //$('#btreg').attr('disabled','true');
+        $.ajax({ 
+                type: "post", 
+                url: "{:U('Admin/Index/register','','')}",
+                data: {account: account, pwd : pwd, code: code,repwd: repwd},
+                dataType: "json", 
+                success: function (json) { 
+                    if(json.code == 1)
+                        window.location.href="{:U('Admin/Index/index','','')}";
+                    else if(json.code == 2)
+                        _alert(json.msg);
+                    else {
+                        _alert(json.msg);
+                    }
+                    if(json.code == 1) {
+                        var n = parseInt(Math.random()*1000);
+                        $('#rcode').val('');
+                        $('#rimgcode').attr("src","{:U('Admin/Index/imgcode')}?t="+n);
+                        $('#btreg').removeAttr('disabled');
+                    }
+                }, 
+                error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                        _alert(errorThrown);
+                }
+        });
+        return false;
+    }
+    
+    function _alert(msg) {
+        $('.divide-40').html("<font color=red>"+msg+"</font>");
+    }
+    </script>
+    <!-- /JAVASCRIPTS -->
 </body>
 </html>
