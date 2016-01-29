@@ -84,38 +84,39 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                     <div class="col-md-11">
                         <!-- BOX -->
                         <div class="box border blue">
-                                <div class="box-title">
-                                        <h4><i class="fa fa-table"></i>我的公众号列表</h4>
-                                </div>
-                                <div class="box-body">
-                                        <table class="table table-striped">
-                                                <thead>
-                                                  <tr>
-                                                        <th>名称</th>
-                                                        <th>APPID</th>
-                                                        <th>描述</th>
-                                                        <th>操作</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php 
-                                                foreach($list as $row) {
-                                                ?>
-                                                  <tr>
-                                                        <td><?php echo $row['name'];?></td>
-                                                        <td><?php echo $row['appid'];?></td>
-                                                        <td><?php echo $row['remark'];?></td>
-                                                        <td>删除</td>
-                                                  </tr>
-                                                <?php
-                                                }
-                                                ?>
-                                                </tbody>
-                                          </table>
-                                </div>
+                            <div class="box-title">
+                                <h4><i class="fa fa-table"></i>我的公众号列表</h4>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                      <tr>
+                                        <th>名称</th>
+                                        <th>APPID</th>
+                                        <th>描述</th>
+                                        <th>操作</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php 
+                                    foreach($list as $row) {
+                                    ?>
+                                      <tr>
+                                        <td><?php echo $row['name'];?></td>
+                                        <td><?php echo $row['appid'];?></td>
+                                        <td><?php echo $row['remark'];?></td>
+                                        <td>删除</td>
+                                      </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                         <!-- /BOX -->
-                </div>
+                    </div>
                 </div>
         </div>
 </div>
@@ -145,16 +146,22 @@ $(function(){
                 dataType: "json", 
                 success: function (json) { 
                     if(json.code == 1) {
+                        showlist();
                         bootbox.alert("公众号绑定成功！");
                         $('#name').val(''); $('#appid').val('');
                         $('#appsecret').val('');$('#remark').val('');
-                        showlist();
-                    } else {
-                        _alert(json.msg);
+                    }
+                    else if(json.code == 2)  {
+                        bootbox.alert("公众号修改成功！");
+                        $('#name').val(''); $('#appid').val('');
+                        $('#appsecret').val('');$('#remark').val('');
+                    }
+                    else {
+                        bootbox.alert(json.msg);
                     }
                 }, 
                 error: function (XMLHttpRequest, textStatus, errorThrown) { 
-                        _alert(errorThrown);
+                        bootbox.alert(errorThrown);
                 }
             });
         },
@@ -170,26 +177,19 @@ $(function(){
             appid: "应用ID不能为空",
             appsecret: "应用秘钥不能为空"
         }
-    });    
-    function showlist() {
-        //$('#table > tbody').html('');
-        var str = new Array();
-        str.push("<td>" + $("#name").val() + "</td>");
-        str.push("<td>" + $("#appid").val() + "</td>");
-        str.push("<td>" + $("#appsecret").val() + "</td>");
-        str.push("<td>" + $("#remark").val() + "</td>");
-        $('#table > tbody').append(str.join(""));
-    }
-    
-    function showlist2() {
-        //$('#table > tbody').html('');
-        var str = new Array();
-        str.push("<td>1</td>");
-        str.push("<td>3</td>");
-        str.push("<td>4</td>");
-        str.push("<td>5</td>");
-        $('#table > tbody').append(str.join(""));
-    }
+    });
     
 });
+
+function showlist() {
+    //$('#table > tbody').html('');
+    var str = new Array();
+    str.push("<tr>");
+    str.push("<td>" + $("#name").val() + "</td>");
+    str.push("<td>" + $("#appid").val() + "</td>");
+    str.push("<td>" + $("#appsecret").val() + "</td>");
+    str.push("<td>" + $("#remark").val() + "</td>");
+    str.push("</tr>");
+    $('.table > tbody').append(str.join(""));
+}
 </script>

@@ -16,8 +16,8 @@ class Usermpset extends Model {
                             );
     
     protected $_auto = array ( 
-         array('createtime', 'time', 1, 'function') , 
-         array('updatetime', 'time', 3, 'function'), 
+         array('createtime', 'time', self::MODEL_INSERT, 'function') , 
+         array('updatetime', 'time', self::MODEL_BOTH, 'function'), 
      );
     
     /*
@@ -32,5 +32,29 @@ class Usermpset extends Model {
                 ->page($page,$size)->order('id desc')
                 ->select();
         //return $this->page($page,$size)->order('pid desc')->select();
+    }
+    
+    /*
+     * 新增或修改公众号
+     * return boolean
+     */
+    public function addNew($data) {
+        if(!$data['appid'] && !$data['appsecret']) {
+            $this->error = '应用ID或应用秘钥不能为空';
+            return 0;
+        }
+        $row = $this->_checkAppid($data['appid']);
+        if($row) {
+            $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))->save($data);
+            //echo $this->getLastSql();
+            return $rs!==FALSE? 2: 0;
+        }
+        $id = $this->add($data);
+        if($id) { return 1; }
+        return 0;
+    }
+    
+    private function _checkAppid($appid) {
+        return $this->where('appid="%s"', array($appid))->find();
     }
 }

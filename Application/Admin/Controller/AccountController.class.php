@@ -22,12 +22,13 @@ class AccountController extends BaseController {
         $data['name'] = trim(I('post.name'));
         $data['remark'] = trim(I('post.remark'));
         $obj = new Usermpset();
-        $rs = $obj->add($data);
-        if($rs) {
-            $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
+        $obj->create($data);
+        $rs = $obj->addNew($data);
+        if($obj->addNew($data)) {
+            $this->ajaxReturn(array('code' => $rs, 'msg' => 'ok'));
         }
         else {
-            $this->ajaxReturn(array('code' => 2, 'msg' => $obj->getError()));
+            $this->ajaxReturn(array('code' => $rs, 'msg' => $obj->getError()));
         }
     }
     
