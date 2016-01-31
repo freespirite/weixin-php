@@ -26,10 +26,10 @@ class Usermpset extends Model {
      * @param $size int 每页显示数
      * return array
      */
-    public function getList($where, $page =1, $size=10) {
-        return $this->field('*')
+    public function getList($where, $fields='*') {
+        return $this->field($fields)
                 ->where($where)
-                ->page($page,$size)->order('id desc')
+                ->order('id desc')
                 ->select();
         //return $this->page($page,$size)->order('pid desc')->select();
     }
@@ -44,11 +44,14 @@ class Usermpset extends Model {
             return 0;
         }
         $row = $this->_checkAppid($data['appid']);
+        $data['updatetime'] = time();
         if($row) {
-            $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))->save($data);
+            $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))
+                ->save($data);
             //echo $this->getLastSql();
             return $rs!==FALSE? 2: 0;
         }
+        $data['createtime'] = $data['updatetime'];
         $id = $this->add($data);
         if($id) { return 1; }
         return 0;

@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2016 �?01 �?29 �?12:27
--- 服务器版本: 5.6.24
--- PHP 版本: 5.6.8
+-- 生成日期: 2016 �?01 �?31 �?18:24
+-- 服务器版本: 5.6.11
+-- PHP 版本: 5.5.1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -56,14 +56,16 @@ CREATE TABLE IF NOT EXISTS `wx_mp_set` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `appid` (`appid`),
   KEY `uid` (`uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户公众号设置' AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='用户公众号设置' AUTO_INCREMENT=4 ;
 
 --
 -- 转存表中的数据 `wx_mp_set`
 --
 
 INSERT INTO `wx_mp_set` (`id`, `uid`, `name`, `appid`, `mchid`, `key`, `appsecret`, `sslcert`, `sslkey`, `remark`, `createtime`, `updatetime`) VALUES
-(1, 3, '随意', 'wx3152faa31d086ea4', '', '', 'b7bfe46a0fdecee7368f8741d547170a', '', '', '测试的公众号5', 0, 0);
+(1, 3, '我的公众号', 'wx3152faa31d086ea4', '', '', 'b7bfe46a0fdecee7368f8741d547170a', '', '', '测试的公众号6', 0, 0),
+(2, 3, '第二个小号', 'wx3152faa31d086ea1', '', '', 'wx3152faa31d086ea4dddddddd', '', '', '不描述行不行啊', 0, 1454089522),
+(3, 3, '第三个小号', 'wx3152faa31d086ea3', '', '', 'b7bfe46a0fdecee7368f8741d547170b', '', '', '测试的公众号03', 1454089589, 1454089589);
 
 -- --------------------------------------------------------
 

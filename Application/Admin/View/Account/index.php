@@ -93,6 +93,7 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                       <tr>
                                         <th>名称</th>
                                         <th>APPID</th>
+                                        <th>创建时间</th>
                                         <th>描述</th>
                                         <th>操作</th>
                                       </tr>
@@ -101,7 +102,7 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                     <?php 
                                     foreach($list as $row) {
                                     ?>
-                                      <tr>
+                                      <tr id="_list<?php echo $row['id'];?>">
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['appid'];?></td>
                                         <td><?php echo $row['remark'];?></td>
@@ -146,15 +147,14 @@ $(function(){
                 dataType: "json", 
                 success: function (json) { 
                     if(json.code == 1) {
-                        showlist();
                         bootbox.alert("公众号绑定成功！");
-                        $('#name').val(''); $('#appid').val('');
-                        $('#appsecret').val('');$('#remark').val('');
+                        showlist();
+                        listClear();
                     }
                     else if(json.code == 2)  {
                         bootbox.alert("公众号修改成功！");
-                        $('#name').val(''); $('#appid').val('');
-                        $('#appsecret').val('');$('#remark').val('');
+                        showlist();
+                        listClear();
                     }
                     else {
                         bootbox.alert(json.msg);
@@ -178,11 +178,35 @@ $(function(){
             appsecret: "应用秘钥不能为空"
         }
     });
-    
+    showlist();
 });
 
 function showlist() {
-    //$('#table > tbody').html('');
+    $.ajax({ 
+        type: "post", 
+        url: "{:U('Admin/Account/ajaxList','','')}",
+        data: {mt: parseInt(Math.random()*1000)},
+        dataType: "json", 
+        success: function (json) {
+            var str = new Array();
+            for(var i=0; i<json.length; i++) {
+                str.push("<tr>");
+                str.push("<td>" + json[i].name  + "</td>");
+                str.push("<td>" + json[i].appid + "</td>");
+                str.push("<td>" + dateFormat(json[i].createtime,1) + "</td>");
+                str.push("<td>" + json[i].remark + "</td>");
+                str.push("<td>删除</td>");
+                str.push("</tr>");
+            }
+            if(str.length > 0) {
+                $('.table > tbody').html(str.join(""));
+            }
+        }, 
+        error: function (XMLHttpRequest, textStatus, errorThrown) { 
+                bootbox.alert(errorThrown);
+        }
+    });
+/*
     var str = new Array();
     str.push("<tr>");
     str.push("<td>" + $("#name").val() + "</td>");
@@ -191,5 +215,26 @@ function showlist() {
     str.push("<td>" + $("#remark").val() + "</td>");
     str.push("</tr>");
     $('.table > tbody').append(str.join(""));
+    */
+}
+function listClear() {
+    $('#name').val(''); $('#appid').val('');
+    $('#appsecret').val('');$('#remark').val('');
+}
+function dateFormat(timestamp,n){
+    update = new Date(timestamp*1000);//时间戳要乘1000
+    year   = update.getFullYear();
+    month  = (update.getMonth()+1<10)?('0'+(update.getMonth()+1)):(update.getMonth()+1);
+    day    = (update.getDate()<10)?('0'+update.getDate()):(update.getDate());
+    hour   = (update.getHours()<10)?('0'+update.getHours()):(update.getHours());
+    minute = (update.getMinutes()<10)?('0'+update.getMinutes()):(update.getMinutes());
+    second = (update.getSeconds()<10)?('0'+update.getSeconds()):(update.getSeconds());
+    if(n==1){
+  return (year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second);
+ }else if(n==2){
+  return (year+'-'+month+'-'+day);
+ }else{
+  return 0;
+ }
 }
 </script>

@@ -12,7 +12,7 @@ class AccountController extends BaseController {
     public function index() {
         if (!IS_POST){
             //$this->assign('pageSet', 'wizards_validations');
-            $this->_list();
+            //$this->_list();
             $this->display();
             return;
         }
@@ -30,6 +30,12 @@ class AccountController extends BaseController {
         else {
             $this->ajaxReturn(array('code' => $rs, 'msg' => $obj->getError()));
         }
+    }
+
+    public function ajaxList() {
+        $obj = new Usermpset();
+        $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,createtime');
+        $this->ajaxReturn($list);
     }
     
     /*
