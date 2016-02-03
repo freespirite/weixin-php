@@ -35,49 +35,16 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 <div class="row">
         <div class="col-md-12">
                 <div class="row">
-                        <div class="col-md-11">
-                                <div class="box border primary">
-                                        
-                                        <div class="box-body big">
-                                                <h3 class="form-title">开发者ID</h3>
-                                                <form class="form-horizontal" novalidate="novalidate" method="post" >
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">公众号名称
-                                                            <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="name" id="name" class="form-control" placeholder="公众号名称" maxlength="10">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">AppID(应用ID)
-                                                        <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="appid" id="appid" class="form-control" placeholder="应用ID" maxlength="20">
-                                                            <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">AppSecret(应用密钥)
-                                                            <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="appsecret" id="appsecret" class="form-control" placeholder="应用秘钥" maxlength="32">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">公众号描述</label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="remark" id="remark" class="form-control" placeholder="公众号描述" maxlength="32">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <button type="submit" class="btn btn-success">保存</button>
-                                                </form>
-                                        </div>
-                                </div>
+                    <div class="col-md-11">
+                        <div class="box border primary">
 
+                            <div class="box-body big">
+                                <h3 class="form-title">开发者ID</h3>
+                                <button id="addedit" class="btn btn-primary">绑定公众号</button>
+                            </div>
                         </div>
+
+                    </div>
                 </div>
                 
                 <div class="row">
@@ -179,6 +146,9 @@ $(function(){
         }
     });
     showlist();
+    $("#addedit").click(function(){
+        $("#box-config").modal("show");
+    });
 });
 
 function showlist() {
@@ -195,7 +165,8 @@ function showlist() {
                 str.push("<td>" + json[i].appid + "</td>");
                 str.push("<td>" + dateFormat(json[i].createtime,1) + "</td>");
                 str.push("<td>" + json[i].remark + "</td>");
-                str.push("<td>删除</td>");
+                str.push("<td><button class='btn btn-xs btn-warning' onclick='wxedit("+json[i]+")'>修改</button> ");
+                str.push("<button class='btn btn-xs btn-danger' onclick='wxdel("+json[i].id+")'>删除</button></td>");
                 str.push("</tr>");
             }
             if(str.length > 0) {
@@ -206,16 +177,6 @@ function showlist() {
                 bootbox.alert(errorThrown);
         }
     });
-/*
-    var str = new Array();
-    str.push("<tr>");
-    str.push("<td>" + $("#name").val() + "</td>");
-    str.push("<td>" + $("#appid").val() + "</td>");
-    str.push("<td>" + $("#appsecret").val() + "</td>");
-    str.push("<td>" + $("#remark").val() + "</td>");
-    str.push("</tr>");
-    $('.table > tbody').append(str.join(""));
-    */
 }
 function listClear() {
     $('#name').val(''); $('#appid').val('');
@@ -236,5 +197,15 @@ function dateFormat(timestamp,n){
  }else{
   return 0;
  }
+}
+
+function wxedit(data) {
+    
+}
+function wxdel(id) {
+//    bootbox.confirm("公众号修改成功！");
+    bootbox.confirm("删除后该公众号下的内容将无法关联，确认删除?", function(result){
+        if(result) { bootbox.alert("["+id+"]公众号删除成功！"); }
+    });
 }
 </script>

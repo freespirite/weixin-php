@@ -5,7 +5,7 @@
  * @author Administrator
  */
 namespace Admin\Controller;
-use Admin\Model\Usermpset;
+use Admin\Model\UsermpsetModel;
 
 class AccountController extends BaseController {
     
@@ -21,7 +21,7 @@ class AccountController extends BaseController {
         $data['appsecret'] = trim(I('post.appsecret'));
         $data['name'] = trim(I('post.name'));
         $data['remark'] = trim(I('post.remark'));
-        $obj = new Usermpset();
+        $obj = new UsermpsetModel();
         $obj->create($data);
         $rs = $obj->addNew($data);
         if($obj->addNew($data)) {
@@ -33,7 +33,7 @@ class AccountController extends BaseController {
     }
 
     public function ajaxList() {
-        $obj = new Usermpset();
+        $obj = new UsermpsetModel();
         $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,createtime');
         $this->ajaxReturn($list);
     }
@@ -45,7 +45,7 @@ class AccountController extends BaseController {
         //$page = intval(I('get.p'));
         //$page = $page? $page: 1;
         //$size = in_array(I('get.size'), array(10, 15, 30))? $size: 10;
-        $obj = new Usermpset();
+        $obj = new UsermpsetModel();
         $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid']);
         $this->assign('list', $list);
         

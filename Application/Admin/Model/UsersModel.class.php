@@ -61,4 +61,6 @@ class UsersModel extends Model {
     public function createPwd($pwd) {
         return md5(C('APP_KEY').$pwd);
     }
+    
+    
 }

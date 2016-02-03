@@ -6,7 +6,7 @@ use Think\Model;
  *
  * @author Administrator
  */
-class Usermpset extends Model {
+class UsermpsetModel extends Model {
     protected $tableName = 'mp_set';
     
     protected $_validate = array (
@@ -44,14 +44,15 @@ class Usermpset extends Model {
             return 0;
         }
         $row = $this->_checkAppid($data['appid']);
-        $data['updatetime'] = time();
+        //$data['updatetime'] = time();
         if($row) {
             $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))
                 ->save($data);
             //echo $this->getLastSql();
             return $rs!==FALSE? 2: 0;
         }
-        $data['createtime'] = $data['updatetime'];
+        //$data['createtime'] = $data['updatetime'];
+        if($this->_checkWeixinNum()) { return 3; }
         $id = $this->add($data);
         if($id) { return 1; }
         return 0;
@@ -59,5 +60,15 @@ class Usermpset extends Model {
     
     private function _checkAppid($appid) {
         return $this->where('appid="%s"', array($appid))->find();
+    }
+    
+    /*
+     * 检查可以绑定的微信号数量是否超出限制
+     */
+    private function _checkWeixinNum() {
+        
+        $exists = $this->where('uid='.session(C('ADMIN_SESSION'))['uid'])->count();
+        $limit  = M('Users')->where('uid='.session(C('ADMIN_SESSION'))['uid'])->getField('winxinNum');
+        return $limit > $exists;
     }
 }

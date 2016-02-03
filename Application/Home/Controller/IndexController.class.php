@@ -18,9 +18,6 @@ class IndexController extends Controller
 
     public function index()
     {
-        $obj = new CasusModel();
-        $list = $obj->getList(1, 20, 'disable=0');
-        $this->assign('list', $list);
-        $this->display('index');
+        exit('welcome');
     }
 }
