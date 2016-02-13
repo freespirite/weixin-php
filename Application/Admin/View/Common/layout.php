@@ -127,54 +127,21 @@
 			<!-- SAMPLE BOX CONFIGURATION MODAL FORM-->
 			<div class="modal fade" id="box-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
-				  <div class="modal-content">
+                                    <form class="form-horizontal" novalidate="novalidate" method="post" >
+				    <div class="modal-content">
 					<div class="modal-header">
 					  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					  <h4 class="modal-title">Box Settings</h4>
 					</div>
 					<div class="modal-body">
-					  <h3 class="form-title">开发者ID</h3>
-                                                <form class="form-horizontal" novalidate="novalidate" method="post" >
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">公众号名称
-                                                            <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="name" id="name" class="form-control" placeholder="公众号名称" maxlength="10">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">AppID(应用ID)
-                                                        <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="appid" id="appid" class="form-control" placeholder="应用ID" maxlength="20">
-                                                            <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">AppSecret(应用密钥)
-                                                            <span class="required">*</span></label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="appsecret" id="appsecret" class="form-control" placeholder="应用秘钥" maxlength="32">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                        <label class="col-sm-3 control-label">公众号描述</label>
-                                                        <div class="col-sm-9">
-                                                            <input type="text" name="remark" id="remark" class="form-control" placeholder="公众号描述" maxlength="32">
-                                                          <span class="error-span"></span>
-                                                        </div>
-                                                  </div>
-                                                  <button type="submit" class="btn btn-success">保存</button>
-                                                  <a href="#table-modal" id="addedit" class="btn btn-primary">绑定公众号</a>
-                                                </form>
+                                                
 					</div>
 					<div class="modal-footer">
-					  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					  <button type="button" class="btn btn-primary">Save changes</button>
+					  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					  <button type="submit" class="btn btn-primary">保存</button>
 					</div>
-				  </div>
+				    </div>
+                                    </form>
 				</div>
 			</div>
 			<!-- /SAMPLE BOX CONFIGURATION MODAL FORM-->

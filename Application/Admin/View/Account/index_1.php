@@ -20,18 +20,13 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                 <li>
                                         <a href="#"><?php echo $aryDaohang['title'];?></a>
                                 </li>
-                                <li>
-                                    <?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?> 
-                                </li>
+                                <li><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></li>
                         </ul>
                         <!-- /BREADCRUMBS -->
                         <div class="clearfix">
-                            <h3 class="content-title pull-left"><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></h3>
+                                <h3 class="content-title pull-left"><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></h3>
                         </div>
-                        <div class="description">
-                            <!--Form Elements and Features-->
-                            绑定公众号后可以进行内容发布，回复管理和自定义菜单设置等一系列公众号接口操作！
-                        </div>
+                        <div class="description">Form Elements and Features</div>
                 </div>
         </div>
 </div>
@@ -39,18 +34,52 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 <!-- FORMS -->
 <div class="row">
         <div class="col-md-12">
-<!--                <div class="row">
-                    <div class="col-md-11">
-                        <div class="box border primary">
+                <div class="row">
+                        <div class="col-md-11">
+                                <div class="box border primary">
+                                        
+                                        <div class="box-body big">
+                                                <h3 class="form-title">开发者ID</h3>
+                                                <form class="form-horizontal" novalidate="novalidate" method="post" >
+                                                  <div class="form-group">
+                                                        <label class="col-sm-3 control-label">公众号名称
+                                                            <span class="required">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="name" id="name" class="form-control" placeholder="公众号名称" maxlength="10">
+                                                          <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-3 control-label">AppID(应用ID)
+                                                        <span class="required">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="appid" id="appid" class="form-control" placeholder="应用ID" maxlength="20">
+                                                            <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-3 control-label">AppSecret(应用密钥)
+                                                            <span class="required">*</span></label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="appsecret" id="appsecret" class="form-control" placeholder="应用秘钥" maxlength="32">
+                                                          <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                        <label class="col-sm-3 control-label">公众号描述</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="text" name="remark" id="remark" class="form-control" placeholder="公众号描述" maxlength="32">
+                                                          <span class="error-span"></span>
+                                                        </div>
+                                                  </div>
+                                                  <button type="submit" class="btn btn-success">保存</button>
+                                                  <a href="#table-modal" id="addedit" class="btn btn-primary">绑定公众号</a>
+                                                </form>
+                                        </div>
+                                </div>
 
-                            <div class="box-body big">
-                                <h3 class="form-title">开发者ID</h3>
-                                <button onclick="wxadd()" class="btn btn-primary">绑定公众号</button>
-                            </div>
                         </div>
-
-                    </div>
-                </div>-->
+                </div>
                 
                 <div class="row">
                     <div class="col-md-11">
@@ -58,7 +87,6 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                         <div class="box border blue">
                             <div class="box-title">
                                 <h4><i class="fa fa-table"></i>我的公众号列表</h4>
-                                <h5><button onclick="wxadd()" class="btn btn-xs btn-default">新增绑定公众号</button></h5>
                             </div>
                             <div class="box-body">
                                 <table class="table table-striped">
@@ -72,7 +100,18 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
                                       </tr>
                                     </thead>
                                     <tbody>
-                                    
+                                    <?php 
+                                    foreach($list as $row) {
+                                    ?>
+                                      <tr id="_list<?php echo $row['id'];?>">
+                                        <td><?php echo $row['name'];?></td>
+                                        <td><?php echo $row['appid'];?></td>
+                                        <td><?php echo $row['remark'];?></td>
+                                        <td>删除</td>
+                                      </tr>
+                                    <?php
+                                    }
+                                    ?>
                                     </tbody>
                                 </table>
 
@@ -85,10 +124,11 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 </div>
 <!-- /FORMS -->
 <div class="separator"></div>
-<script src="__PUBLIC__/adm/js/wxaccount.js"></script>
 <script type="text/javascript">
-var cache = null;
 $(function(){
+    $("#addedit").click(function(){
+         $("#box-config").modal("show");
+    });
     jQuery.validator.addMethod("checkappid", function(value, element) {  
         //alert(element.placeholder);
         //var rs = this.optional(element) || value.length < 18;
@@ -111,13 +151,11 @@ $(function(){
                 dataType: "json", 
                 success: function (json) { 
                     if(json.code == 1) {
-                        $("#box-config").modal("hide");
                         bootbox.alert("公众号绑定成功！");
                         showlist();
                         listClear();
                     }
                     else if(json.code == 2)  {
-                        $("#box-config").modal("hide");
                         bootbox.alert("公众号修改成功！");
                         showlist();
                         listClear();
@@ -144,8 +182,6 @@ $(function(){
             appsecret: "应用秘钥不能为空"
         }
     });
-    wxaccount.init();
-//    $("#box-config").modal("show");
     showlist();
 });
 
@@ -157,21 +193,19 @@ function showlist() {
         dataType: "json", 
         success: function (json) {
             var str = new Array();
-            json.add === 1? $('.box-title h5').show(): $('.box-title h5').hide();
-            if(json.data.length <= 0) { cache = null;return; }
-            cache = json.data;
-            for(var i=0; i<json.data.length; i++) {
+            for(var i=0; i<json.length; i++) {
                 str.push("<tr>");
-                str.push("<td>" + json.data[i].name  + "</td>");
-                str.push("<td>" + json.data[i].appid + "</td>");
-                str.push("<td>" + dateFormat(json.data[i].createtime,1) + "</td>");
-                str.push("<td>" + json.data[i].remark + "</td>");
-                str.push("<td><button class='btn btn-xs btn-warning' onclick='wxedit("+json.data[i].id+")'>修改</button> ");
-                str.push("<button class='btn btn-xs btn-danger' onclick='wxdel("+json.data[i].id+")'>删除</button></td>");
+                str.push("<td>" + json[i].name  + "</td>");
+                str.push("<td>" + json[i].appid + "</td>");
+                str.push("<td>" + dateFormat(json[i].createtime,1) + "</td>");
+                str.push("<td>" + json[i].remark + "</td>");
+                str.push("<td><button class='btn btn-xs btn-warning' onclick='wxedit("+json[i]+")'>修改</button> ");
+                str.push("<button class='btn btn-xs btn-danger' onclick='wxdel("+json[i].id+")'>删除</button></td>");
                 str.push("</tr>");
             }
-            $('.table > tbody').html(str.join(""));
-            
+            if(str.length > 0) {
+                $('.table > tbody').html(str.join(""));
+            }
         }, 
         error: function (XMLHttpRequest, textStatus, errorThrown) { 
                 bootbox.alert(errorThrown);
@@ -181,7 +215,6 @@ function showlist() {
 function listClear() {
     $('#name').val(''); $('#appid').val('');
     $('#appsecret').val('');$('#remark').val('');
-    $('#wxid').val('0');
 }
 function dateFormat(timestamp,n){
     update = new Date(timestamp*1000);//时间戳要乘1000
@@ -200,22 +233,8 @@ function dateFormat(timestamp,n){
  }
 }
 
-function wxadd() {
-    listClear();
-    $("#box-config").modal("show");
-}
-function wxedit(id) {
-    if(cache === null) { return; }
-    for(var i in cache) {
-        if(parseInt(cache[i].id) !== id) { continue; } 
-        $('#name').val(cache[i].name); 
-        $('#appid').val(cache[i].appid);
-        $('#appsecret').val(cache[i].appsecret);
-        $('#remark').val(cache[i].remark);
-        $('#wxid').val(cache[i].id);
-        $("#box-config").modal("show");
-        return;
-    }
+function wxedit(data) {
+    
 }
 function wxdel(id) {
 //    bootbox.confirm("公众号修改成功！");

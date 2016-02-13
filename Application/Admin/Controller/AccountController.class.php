@@ -10,9 +10,11 @@ use Admin\Model\UsermpsetModel;
 class AccountController extends BaseController {
     
     public function index() {
+        $obj = new UsermpsetModel();
         if (!IS_POST){
             //$this->assign('pageSet', 'wizards_validations');
             //$this->_list();
+            $this->assign('addNew', $obj->checkUserStatus());
             $this->display();
             return;
         }
@@ -21,7 +23,7 @@ class AccountController extends BaseController {
         $data['appsecret'] = trim(I('post.appsecret'));
         $data['name'] = trim(I('post.name'));
         $data['remark'] = trim(I('post.remark'));
-        $obj = new UsermpsetModel();
+        
         $obj->create($data);
         $rs = $obj->addNew($data);
         if($obj->addNew($data)) {
@@ -35,7 +37,8 @@ class AccountController extends BaseController {
     public function ajaxList() {
         $obj = new UsermpsetModel();
         $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,createtime');
-        $this->ajaxReturn($list);
+        $add = $obj->checkUserStatus()? 1: 0;
+        $this->ajaxReturn(array('add'=> $add, 'data'=>$list));
     }
     
     /*

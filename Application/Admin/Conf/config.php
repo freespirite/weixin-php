@@ -45,6 +45,10 @@ return array(
             ),
     ),
     
+    'USER_WX_LIMIT' => array(
+        '1' => 3, //普通免费用户可以绑定微信号数量
+        '2' => 4, //付费用户可以绑定微信号数量
+    ),
     /*
      * freespirite
     AppID(应用ID)wx3152faa31d086ea4

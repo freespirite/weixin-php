@@ -41,7 +41,7 @@ class UsermpsetModel extends Model {
     public function addNew($data) {
         if(!$data['appid'] && !$data['appsecret']) {
             $this->error = '应用ID或应用秘钥不能为空';
-            return 0;
+            return false;
         }
         $row = $this->_checkAppid($data['appid']);
         //$data['updatetime'] = time();
@@ -49,13 +49,21 @@ class UsermpsetModel extends Model {
             $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))
                 ->save($data);
             //echo $this->getLastSql();
-            return $rs!==FALSE? 2: 0;
+            if($rs===FALSE) {
+                $this->error = '更新失败';
+                return FALSE;
+            }
+            return TRUE;
         }
         //$data['createtime'] = $data['updatetime'];
-        if($this->_checkWeixinNum()) { return 3; }
+        if(!$this->checkUserStatus()) { 
+            $this->error = '超出绑定账号上限';
+            return FALSE;
+        }
         $id = $this->add($data);
-        if($id) { return 1; }
-        return 0;
+        if($id) { return TRUE; }
+        $this->error = '更新失败';
+        return FALSE;
     }
     
     private function _checkAppid($appid) {
@@ -65,10 +73,10 @@ class UsermpsetModel extends Model {
     /*
      * 检查可以绑定的微信号数量是否超出限制
      */
-    private function _checkWeixinNum() {
+    public function checkUserStatus() {
         
         $exists = $this->where('uid='.session(C('ADMIN_SESSION'))['uid'])->count();
-        $limit  = M('Users')->where('uid='.session(C('ADMIN_SESSION'))['uid'])->getField('winxinNum');
-        return $limit > $exists;
+        $status = M('Users')->where('uid='.session(C('ADMIN_SESSION'))['uid'])->getField('status');
+        return $exists < C('USER_WX_LIMIT')[$status];
     }
 }
