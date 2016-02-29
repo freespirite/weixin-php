@@ -30,7 +30,7 @@ var wxaccount = function() {
         html.push('<label class="col-sm-4 control-label">公众号描述</label>');
         html.push('<div class="col-sm-8">');
         html.push('<input type="text" name="remark" id="remark" class="form-control" placeholder="公众号描述" maxlength="32">');
-        html.push('<input type="hidden" name="wxid" id="wxid" value="0">');
+        html.push('<input type="hidden" name="id" id="id" value="0">');
         html.push('<span class="error-span"></span>');
         html.push('</div>');
         html.push('</div>');

@@ -24,6 +24,15 @@ return array(
                 'flag' => 'fa-picture-o',
                 'sub' => array(
                     'index' => array('title'=> '我的素材库'),
+                    'add' => array('title'=> '素材添加'),
+                ),
+            ),
+        'users' => array(
+                'title'=> '用户管理',
+                'flag' => 'fa-picture-o',
+                'sub' => array(
+                    'index' => array('title'=> '用户列表'),
+                    'group' => array('title'=> '用户分组'),
                 ),
             ),
         'message' => array(
@@ -46,8 +55,8 @@ return array(
     ),
     
     'USER_WX_LIMIT' => array(
-        '1' => 3, //普通免费用户可以绑定微信号数量
-        '2' => 4, //付费用户可以绑定微信号数量
+        '1' => 2, //普通免费用户可以绑定微信号数量
+        '2' => 10, //付费用户可以绑定微信号数量
     ),
     /*
      * freespirite

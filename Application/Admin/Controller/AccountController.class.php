@@ -10,7 +10,8 @@ use Admin\Model\UsermpsetModel;
 class AccountController extends BaseController {
     
     public function index() {
-        $obj = new UsermpsetModel();
+        //$obj = new UsermpsetModel();
+        $obj = D('Usermpset');
         if (!IS_POST){
             //$this->assign('pageSet', 'wizards_validations');
             //$this->_list();
@@ -18,19 +19,23 @@ class AccountController extends BaseController {
             $this->display();
             return;
         }
-        $data['uid'] = session(C('ADMIN_SESSION'))['uid'];
-        $data['appid'] = trim(I('post.appid'));
-        $data['appsecret'] = trim(I('post.appsecret'));
-        $data['name'] = trim(I('post.name'));
-        $data['remark'] = trim(I('post.remark'));
-        
-        $obj->create($data);
-        $rs = $obj->addNew($data);
-        if($obj->addNew($data)) {
-            $this->ajaxReturn(array('code' => $rs, 'msg' => 'ok'));
+//        $data['id']      = intval(I('post.id'));
+//        $data['uid']       = session(C('ADMIN_SESSION'))['uid'];
+//        $data['appid']     = trim(I('post.appid'));
+//        $data['appsecret'] = trim(I('post.appsecret'));
+//        $data['name']      = trim(I('post.name'));
+//        $data['remark']    = trim(I('post.remark'));
+        $id = intval(I('post.id'));
+        if($obj->create()) {
+            if($obj->addNew($id)) {
+                $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
+            }
+            else {
+                $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
+            }
         }
         else {
-            $this->ajaxReturn(array('code' => $rs, 'msg' => $obj->getError()));
+            $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
         }
     }
 
@@ -41,6 +46,15 @@ class AccountController extends BaseController {
         $this->ajaxReturn(array('add'=> $add, 'data'=>$list));
     }
     
+    public function ajaxWxDel() {
+        $obj = new UsermpsetModel();
+        if($obj->wxDelete(intval(I('post.id')))) {
+            $this->ajaxReturn(array('code' => 1, 'msg' => 'ok'));
+        }
+        else {
+            $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
+        }
+    }
     /*
      * 返回平台列表
      */

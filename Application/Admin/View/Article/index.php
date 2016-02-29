@@ -51,14 +51,14 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 
                     </div>
                 </div>-->
-                
+
                 <div class="row">
                     <div class="col-md-11">
                         <!-- BOX -->
                         <div class="box border blue">
                             <div class="box-title">
                                 <h4><i class="fa fa-table"></i>我的公众号列表</h4>
-                                <h5><button onclick="wxadd()" class="btn btn-xs btn-default">新增绑定公众号</button></h5>
+                                <button onclick="wxadd()" class="btn btn-xs btn-default">新增绑定公众号</button>
                             </div>
                             <div class="box-body">
                                 <table class="table table-striped">
@@ -152,7 +152,7 @@ function showlist() {
         dataType: "json", 
         success: function (json) {
             var str = new Array();
-            json.add === 1? $('.box-title h5').show(): $('.box-title h5').hide();
+            //json.add === 1? $('.box-title h5').show(): $('.box-title h5').hide();
             if(json.data.length <= 0) { cache = null;return; }
             cache = json.data;
             for(var i=0; i<json.data.length; i++) {

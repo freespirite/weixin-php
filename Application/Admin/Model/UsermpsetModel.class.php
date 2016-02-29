@@ -7,18 +7,26 @@ use Think\Model;
  * @author Administrator
  */
 class UsermpsetModel extends Model {
+//    protected $insertFields = 'name,email'; // 新增数据的时候允许写入name和email字段
+//    protected $updateFields = 'email'; // 编辑数据的时候只允许写入email字段
+    
     protected $tableName = 'mp_set';
     
     protected $_validate = array (
-                                array('name','require','公众号名称不能为空'),
-                                array('appid','require','应用ID不能为空'),
-                                array('appsecret',32,'应用秘钥为32为字符串',1,'length'),
-                            );
+        array('id','number','修改的公众号ID不正确',self::MODEL_UPDATE),
+        array('name','require','公众号名称不能为空'),
+        array('appid','require','应用ID不能为空'),
+        array('appsecret',32,'应用秘钥为32为字符串',self::MODEL_BOTH,'length'),
+        array('remark','0,100','描述字数在100字内',self::MODEL_BOTH,'length'),
+
+    );
     
     protected $_auto = array ( 
          array('createtime', 'time', self::MODEL_INSERT, 'function') , 
          array('updatetime', 'time', self::MODEL_BOTH, 'function'), 
      );
+    
+    protected $updateFields = 'name,appid,appsecret,remark,updatetime';
     
     /*
      * 返回平台列表
@@ -38,17 +46,16 @@ class UsermpsetModel extends Model {
      * 新增或修改公众号
      * return boolean
      */
-    public function addNew($data) {
-        if(!$data['appid'] && !$data['appsecret']) {
-            $this->error = '应用ID或应用秘钥不能为空';
-            return false;
-        }
-        $row = $this->_checkAppid($data['appid']);
-        //$data['updatetime'] = time();
-        if($row) {
-            $rs = $this->where('appid="%s" AND uid=%d',array($row['appid'], session(C('ADMIN_SESSION'))['uid']))
-                ->save($data);
-            //echo $this->getLastSql();
+    public function addNew($id) {
+        //print_r($this->data);exit;
+//        if(!$data['appid'] && !$data['appsecret']) {
+//            $this->error = '应用ID或应用秘钥不能为空';
+//            return false;
+//        }
+        //echo $this->id;exit;
+        if($id) {
+            $rs = $this->where('id='.$id.' AND uid='.session(C('ADMIN_SESSION'))['uid'])->save();
+//            echo $this->getLastSql();
             if($rs===FALSE) {
                 $this->error = '更新失败';
                 return FALSE;
@@ -56,17 +63,34 @@ class UsermpsetModel extends Model {
             return TRUE;
         }
         //$data['createtime'] = $data['updatetime'];
+        $row = $this->_checkAppid($this->data['appid']);
+        if($row) {
+            $this->error = '该公众号APPID已经存在';
+            return FALSE;
+        }
         if(!$this->checkUserStatus()) { 
             $this->error = '超出绑定账号上限';
             return FALSE;
         }
-        $id = $this->add($data);
-        if($id) { return TRUE; }
-        $this->error = '更新失败';
-        return FALSE;
+        $this->data['uid'] = session(C('ADMIN_SESSION'))['uid'];
+        $rs = $this->add();
+        $this->error = $rs? '': '添加公众号失败';
+        return $rs;
     }
     
+    public function wxDelete($id) {
+        $rs = $this->where('id='.$id.' AND uid='.session(C('ADMIN_SESSION'))['uid'])->delete();
+        //echo $this->getLastSql();exit;
+        if(!$rs) {
+            $this->error = '删除失败';
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+
     private function _checkAppid($appid) {
+        //return $this->where('appid="%s" AND uid=%d', array($appid, session(C('ADMIN_SESSION'))['uid']))->find();
         return $this->where('appid="%s"', array($appid))->find();
     }
     
