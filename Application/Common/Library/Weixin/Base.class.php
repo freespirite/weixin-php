@@ -13,31 +13,28 @@ namespace Common\Library\Weixin;
  */
 class Base {
     //put your code here
-    static $wxappid = '';
-    static $wxmchid = '';
-    static $wxkey = '';
-    static $wxappsecret = '';
-    static $sslcert = '';
-    static $sslkey = '';
+    private $_conf = array(
+            'wxappid' => '', 
+            'wxmchid' => '',
+            'wxkey'   => '',
+            'wxappsecret' => '',
+            'sslcert'     => '',
+            'sslkey'      => '',
+        );
+    
+    private $_xmlValues = array();
     
     function __construct($conf) {
-        self::$wxappid = $conf['wxappid'];
-        self::$wxmchid = $conf['wxmchid'];
-        self::$wxkey   = $conf['wxkey'];
-        self::$wxappsecret = $conf['wxappsecret'];
-        self::$sslcert     = $conf['sslcert'];
-        self::$sslkey      = $conf['sslkey'];
+        
+        foreach ($this->_conf as $key => $val) {
+            $val = trim($val);
+            if(!isset($conf[$key]) || !$val) { exit('config key: '.$key.' not set or value empty'); }
+            $this->_conf[$key] = $val;
+        }
     }
     
-    private function _getConf() {
-        return array(
-            'wxappid' => self::$wxappid, 
-            'wxmchid' => self::$wxmchid,
-            'wxkey'   => self::$wxkey,
-            'wxappsecret' => self::$wxappsecret,
-            'sslcert'     => self::$sslcert,
-            'sslkey'      => self::$sslkey,
-        );
+    public function getConf() {
+        return $this->_conf;
     }
     
     /**
@@ -89,11 +86,41 @@ class Base {
     }
     
     private function _createTokenUrl() {
-        $aryUrl['appid'] = self::$wxappid;
-        $aryUrl['secret'] = self::$wxappsecret;
+        $aryUrl['appid'] = $this->_conf['wxappid'];
+        $aryUrl['secret'] = $this->_conf['wxappsecret'];
         $aryUrl['grant_type'] = 'client_credential';
         return 'https://api.weixin.qq.com/cgi-bin/token?'.$this->urlParams($aryUrl);
     }
-    
-    
+
+    public function valid()
+    {
+        $echoStr = isset($_GET["echostr"])? $_GET["echostr"]: '';
+        //valid signature , option
+        if($this->checkSignature()){
+            $aryData = array();
+        	//echo $echoStr;
+            if($_POST) {
+                $echoStr .= 'is post'."\n";
+                $aryData = $this->FromXml($_POST);
+            }
+            else if($HTTP_RAW_POST_DATA) {
+                $echoStr .= 'is HTTP_RAW_POST_DATA'."\n";
+                $aryData = $this->FromXml($HTTP_RAW_POST_DATA);
+            }
+            else if($GLOBALS["HTTP_RAW_POST_DATA"]) {
+                $echoStr .= 'is GLOBALS[HTTP_RAW_POST_DATA]'."\n";
+                $aryData = $this->FromXml($GLOBALS["HTTP_RAW_POST_DATA"]);
+            }
+
+            if($aryData) {
+                foreach($aryData AS $key => $val) {
+                    $echoStr .= $key.' = ' .$val."\n";
+                }
+            }
+            $echoStr .= "\n======================================\n\n";
+            $this->_debugLog(__CLASS__.':'.__LINE__."\n".$echoStr);
+            $this->responseMsg();
+        	//exit;
+        }
+    }
 }

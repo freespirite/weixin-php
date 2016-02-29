@@ -19,6 +19,16 @@ return array(
                     'password' => array('title' => '登录密码修改'),
                 ),
             ),
+        'message' => array(
+                'title'=> '自动回复',
+                'flag' => 'fa-pencil-square-o',
+                'sub' => array(
+                    'index' => array('title'=> '关注回复'),
+                    'automsg' => array('title' => '自动回复'),
+                    'massmsg' => array('title' => '消息群发'),
+                    'msgtpl' => array('title' => '消息模板'),
+                ),
+            ),
         'article' => array(
                 'title'=> '素材管理',
                 'flag' => 'fa-picture-o',
@@ -35,16 +45,7 @@ return array(
                     'group' => array('title'=> '用户分组'),
                 ),
             ),
-        'message' => array(
-                'title'=> '消息管理',
-                'flag' => 'fa-pencil-square-o',
-                'sub' => array(
-                    'index' => array('title'=> '粉丝消息'),
-                    'autoreply' => array('title' => '自动回复'),
-                    'massmsg' => array('title' => '消息群发'),
-                    'msgtpl' => array('title' => '消息模板'),
-                ),
-            ),
+        
         'report' => array(
                 'title'=> '报表统计',
                 'flag' => 'fa-bar-chart-o',
