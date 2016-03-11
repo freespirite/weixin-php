@@ -16,6 +16,9 @@ class AccountController extends BaseController {
             //$this->assign('pageSet', 'wizards_validations');
             //$this->_list();
             $this->assign('addNew', $obj->checkUserStatus());
+            //$this->assign('pageJsInit', 'addWizard.init();');
+            //$this->assign('pageSet', 'wizards_validations');
+            
             $this->display();
             return;
         }
@@ -38,10 +41,32 @@ class AccountController extends BaseController {
             $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
         }
     }
+    
+    public function ajaxAccountAdd() {
+        if (!IS_POST){ $this->ajaxReturn(array('code'=>0, 'msg'=>'opration error')); }
+        $obj = new UsermpsetModel();
+        if($obj->create()) {
+            if($obj->wxAdd()) {
+                $this->ajaxReturn(array('code'=>1, 'msg'=> 'ok'));
+            }
+            else {
+                $this->ajaxReturn(array('code'=>0, 'msg'=>$obj->getError()));
+            }
+        }
+        else {
+            $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
+        }
+    }
+
+    public function add() {
+        $this->assign('pageJsInit', 'addWizard.init();');
+        $this->assign('pageSet', 'wizards_validations');
+        $this->display();
+    }
 
     public function ajaxList() {
         $obj = new UsermpsetModel();
-        $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,createtime');
+        $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,token,aeskey,encrypt,createtime');
         $add = $obj->checkUserStatus()? 1: 0;
         $this->ajaxReturn(array('add'=> $add, 'data'=>$list));
     }
@@ -55,6 +80,15 @@ class AccountController extends BaseController {
             $this->ajaxReturn(array('code' => 0, 'msg' => $obj->getError()));
         }
     }
+    
+    public function ajaxServiceUrl() {
+        $encrypt = UsermpsetModel::getUserAid(trim(I('post.appid')), trim(I('post.appsecret')));
+        $url = $encrypt? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].U('Api/Index/Index','aid='.$encrypt) : '';
+        $this->ajaxReturn(array('url' => $url));
+    }
+
+    
+    
     /*
      * 返回平台列表
      */

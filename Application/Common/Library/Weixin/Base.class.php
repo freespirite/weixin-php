@@ -13,28 +13,108 @@ namespace Common\Library\Weixin;
  */
 class Base {
     //put your code here
-    private $_conf = array(
-            'wxappid' => '', 
-            'wxmchid' => '',
-            'wxkey'   => '',
-            'wxappsecret' => '',
+    public $wxconf = array(
+            'token' => '',
+            'appid' => '', 
+            'mchid' => '',
+            'key'   => '',
+            'appsecret' => '',
             'sslcert'     => '',
             'sslkey'      => '',
         );
     
-    private $_xmlValues = array();
+    protected $xmlValues = array();
     
-    function __construct($conf) {
-        
-        foreach ($this->_conf as $key => $val) {
-            $val = trim($val);
-            if(!isset($conf[$key]) || !$val) { exit('config key: '.$key.' not set or value empty'); }
-            $this->_conf[$key] = $val;
+    protected $values = array();
+    
+    public function __construct($conf)
+    {    
+        foreach ($this->wxconf as $key => $val) {
+            $val = trim($conf[$key]);
+//            if(!isset($conf[$key]) || !$val) { E('config key: '.$key.' not set or value empty'); }
+            if(!isset($conf[$key])) { E('config key: '.$key.' not set'); }
+            $this->wxconf[$key] = $val;
         }
     }
     
-    public function getConf() {
-        return $this->_conf;
+    protected function response()
+    {
+        $this->_valid();
+    }
+
+    private function _valid() {
+        if(!$this->_checkSignature()) { E('签名验证失败！'); }
+        $this->_fromXml($GLOBALS["HTTP_RAW_POST_DATA"]);
+        $rs = $this->response();
+        echo $rs? $rs: trim(I('get.echostr'));
+    }
+    
+    private function _response()
+    {
+	if (!isset($this->values['Content']) || !trim($this->values['Content'])){ 
+            $this->_debugLog(__CLASS__.':'.__LINE__.' content empty');
+            return false;
+        }
+
+        $keyword = trim($this->values['Content']);
+        $time = time();
+        $textTpl = "<xml>
+                    <ToUserName><![CDATA[%s]]></ToUserName>
+                    <FromUserName><![CDATA[%s]]></FromUserName>
+                    <CreateTime>%s</CreateTime>
+                    <MsgType><![CDATA[%s]]></MsgType>
+                    <Content><![CDATA[%s]]></Content>
+                    <FuncFlag>0</FuncFlag>
+                    </xml>";             
+        if(empty( $keyword )) { return false; }
+        switch($keyword) {
+            case 1:
+                $contentStr = '001号大厅欢迎你的到来！';
+                break;
+            case 2:
+                $contentStr = '002号大厅欢迎你的到来！';
+                break;
+            case 3:
+                $contentStr = '003号大厅欢迎你的到来！';
+                break;
+            case 4:
+                $contentStr = '004号大厅欢迎你的到来！';
+                break;
+            default:
+                $contentStr = '888号大厅欢迎你的到来！';
+                break;
+        }
+        $msgType = "text";
+        //$contentStr = "Welcome to wechat world!";
+        $resultStr = sprintf($textTpl, $this->values['FromUserName'], $this->values['ToUserName'], $time, $msgType, $contentStr);
+        $this->_debugLog($resultStr);
+        return $resultStr;
+            
+    }
+    
+    private function _fromXml($xml)
+    {	
+        if(!$xml){
+            E("返回的xml数据异常！");
+        }
+        //将XML转为array
+        //禁止引用外部xml实体
+        libxml_disable_entity_loader(true);
+        $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+        return $this->values;
+    }
+    
+    private function _checkSignature()
+    {
+        if(!$this->wxconf['token']) { E('config token error'); }
+        $signature = trim(I('get.signature'));
+        $timestamp = trim(I('get.timestamp'));
+        $nonce = trim(I('get.nonce'));
+        $tmpArr = array($this->wxconf['token'], $timestamp, $nonce);
+        sort($tmpArr, SORT_STRING);
+        $tmpStr = implode( $tmpArr );
+        $tmpStr = sha1( $tmpStr );
+        return $tmpStr == $signature? TRUE: FALSE;
     }
     
     /**
@@ -86,13 +166,13 @@ class Base {
     }
     
     private function _createTokenUrl() {
-        $aryUrl['appid'] = $this->_conf['wxappid'];
-        $aryUrl['secret'] = $this->_conf['wxappsecret'];
+        $aryUrl['appid'] = $this->wxconf['wxappid'];
+        $aryUrl['secret'] = $this->wxconf['wxappsecret'];
         $aryUrl['grant_type'] = 'client_credential';
         return 'https://api.weixin.qq.com/cgi-bin/token?'.$this->urlParams($aryUrl);
     }
 
-    public function valid()
+    public function valid2()
     {
         $echoStr = isset($_GET["echostr"])? $_GET["echostr"]: '';
         //valid signature , option
@@ -122,5 +202,14 @@ class Base {
             $this->responseMsg();
         	//exit;
         }
+    }
+    
+    protected function debugLog($msg) {
+//        foreach($_GET as $key => $val) {
+//            $msg .= "\n";
+//            $msg .= $key . ' = ' . $val;
+//        }
+        \Think\Log::record($msg,'INFO');
+//        return file_put_contents('./msg_receive.log', $msg."\n", FILE_APPEND);
     }
 }

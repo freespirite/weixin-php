@@ -18,6 +18,11 @@ class UsermpsetModel extends Model {
         array('appid','require','应用ID不能为空'),
         array('appsecret',32,'应用秘钥为32为字符串',self::MODEL_BOTH,'length'),
         array('remark','0,100','描述字数在100字内',self::MODEL_BOTH,'length'),
+        
+        array('token','3,32','token为3-32位长度字符串',self::MODEL_BOTH,'length'),
+        array('aeskey',43,'EncodingAESKey为43位长度字符串',self::MODEL_BOTH,'length'),
+        array('encrypt','1,2,3','消息加密方式错误',self::MODEL_BOTH,'in'),
+        array('wxaid',32,'微信公众号唯一标示符生成失败，请联系管理员',self::MODEL_BOTH,'length'),
 
     );
     
@@ -26,7 +31,7 @@ class UsermpsetModel extends Model {
          array('updatetime', 'time', self::MODEL_BOTH, 'function'), 
      );
     
-    protected $updateFields = 'name,appid,appsecret,remark,updatetime';
+    protected $updateFields = 'name,appid,appsecret,remark,token,aeskey,encrypt,wxaid,updatetime';
     
     /*
      * 返回平台列表
@@ -47,12 +52,6 @@ class UsermpsetModel extends Model {
      * return boolean
      */
     public function addNew($id) {
-        //print_r($this->data);exit;
-//        if(!$data['appid'] && !$data['appsecret']) {
-//            $this->error = '应用ID或应用秘钥不能为空';
-//            return false;
-//        }
-        //echo $this->id;exit;
         if($id) {
             $rs = $this->where('id='.$id.' AND uid='.session(C('ADMIN_SESSION'))['uid'])->save();
 //            echo $this->getLastSql();
@@ -62,7 +61,6 @@ class UsermpsetModel extends Model {
             }
             return TRUE;
         }
-        //$data['createtime'] = $data['updatetime'];
         $row = $this->_checkAppid($this->data['appid']);
         if($row) {
             $this->error = '该公众号APPID已经存在';
@@ -78,6 +76,38 @@ class UsermpsetModel extends Model {
         return $rs;
     }
     
+    public function wxUpdate() {
+        $this->error = '更新公众号失败！';
+        $row = $this->where('uid='.session(C('ADMIN_SESSION'))['uid'].' AND appid="%s" AND id<>'.$this->data['id'], array($this->data['appid']))->find();
+        if($row) {
+            $this->error = '该公众号APPID已经存在';
+            return FALSE;
+        }
+        $rs = $this->where('id='.$id.' AND uid='. session(C('ADMIN_SESSION'))['uid'])->save();
+        if($rs===FALSE) {
+            $this->error = '更新失败';
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    public function wxAdd() {
+        $row = $this->_checkAppid($this->data['appid']);
+        if($row) {
+            $this->error = '该公众号APPID已经存在';
+            return FALSE;
+        }
+        if(!$this->checkUserStatus()) { 
+            $this->error = '超出绑定账号上限';
+            return FALSE;
+        }
+        $this->data['uid'] = session(C('ADMIN_SESSION'))['uid'];
+        $this->data['wxaid'] = $this->getUserAid($this->data['appid'], $this->data['appsecret']);
+        $rs = $this->add();
+        $this->error = $rs? '': '添加公众号失败';
+        return $rs;
+    }
+
     public function wxDelete($id) {
         $rs = $this->where('id='.$id.' AND uid='.session(C('ADMIN_SESSION'))['uid'])->delete();
         //echo $this->getLastSql();exit;
@@ -87,11 +117,15 @@ class UsermpsetModel extends Model {
         }
         return TRUE;
     }
-
+    
+    public function getUserAid($appid, $appsecret) {
+        if(!$appid || !$appsecret) { return ''; }
+        return md5(session(C('ADMIN_SESSION'))['uid'].$appid.$appsecret.C('APP_KEY').time());
+    }
 
     private function _checkAppid($appid) {
         //return $this->where('appid="%s" AND uid=%d', array($appid, session(C('ADMIN_SESSION'))['uid']))->find();
-        return $this->where('appid="%s"', array($appid))->find();
+        return $this->where('uid='.session(C('ADMIN_SESSION'))['uid'].' AND appid="%s"', array($appid))->find();
     }
     
     /*

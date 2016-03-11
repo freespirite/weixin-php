@@ -1,6 +1,9 @@
-<?php
-$aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
-?>
+
+<!-- UNIFORM -->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/js/uniform/css/uniform.default.min.css" />
+<!-- UNIFORM -->
+<script type="text/javascript" src="__PUBLIC__/adm/js/uniform/jquery.uniform.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/adm/js/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
 <style>
     .error {color: red;}
 </style>
@@ -8,29 +11,9 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 <div class="row">
         <div class="col-sm-12">
                 <div class="page-header">
-                        <!-- STYLER -->
-
-                        <!-- /STYLER -->
-                        <!-- BREADCRUMBS -->
-                        <ul class="breadcrumb">
-                                <li>
-                                        <i class="fa fa-home"></i>
-                                        <a href="<?php echo U('admin/index/index');?>">首页</a>
-                                </li>
-                                <li>
-                                        <a href="#"><?php echo $aryDaohang['title'];?></a>
-                                </li>
-                                <li>
-                                    <?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?> 
-                                </li>
-                        </ul>
-                        <!-- /BREADCRUMBS -->
-                        <div class="clearfix">
-                            <h3 class="content-title pull-left"><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></h3>
-                        </div>
+                        <include file="Common/page_header"/>
                         <div class="description">
                             <!--Form Elements and Features-->
-                            绑定公众号后可以进行内容发布，回复管理和自定义菜单设置等一系列公众号接口操作！
                         </div>
                 </div>
         </div>
@@ -39,26 +22,12 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 <!-- FORMS -->
 <div class="row">
         <div class="col-md-12">
-<!--                <div class="row">
-                    <div class="col-md-11">
-                        <div class="box border primary">
-
-                            <div class="box-body big">
-                                <h3 class="form-title">开发者ID</h3>
-                                <button onclick="wxadd()" class="btn btn-primary">绑定公众号</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>-->
-                
                 <div class="row">
                     <div class="col-md-11">
                         <!-- BOX -->
                         <div class="box border blue">
                             <div class="box-title">
-                                <h4><i class="fa fa-table"></i>我的公众号列表</h4>
-                                <h5><button onclick="wxadd()" class="btn btn-xs btn-default">新增绑定公众号</button></h5>
+                                <h4><i class="fa fa-table"></i><?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?></h4>
                             </div>
                             <div class="box-body">
                                 <table class="table table-striped">
@@ -90,13 +59,6 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
 var cache = null;
 $(function(){
     jQuery.validator.addMethod("checkappid", function(value, element) {  
-        //alert(element.placeholder);
-        //var rs = this.optional(element) || value.length < 18;
-//        if(this.optional(element) || (value.length < 18)) {
-//            element.style.border-color = "red";
-//            return true;
-//        }
-//alert(this.optional(element));
         return this.optional(element) || (value.length <= 18);
     }, "请输入正确的应用ID"); 
     
@@ -107,7 +69,16 @@ $(function(){
             $.ajax({ 
                 type: "post", 
                 url: "{:U('Admin/Account/index','','')}",
-                data: {id: $('#id').val(),name: $('#name').val(), appid : $('#appid').val(), appsecret: $('#appsecret').val(), remark: $('#remark').val()},
+                data: {
+                    id: $('#id').val(),
+                    name: $('#name').val(), 
+                    appid : $('#appid').val(), 
+                    appsecret: $('#appsecret').val(), 
+                    remark: $('#remark').val(),
+                    token: $('#token').val(),
+                    aeskey: $('#aeskey').val(),
+                    encrypt: $('input:radio[name="encrypt"]:checked').val()
+                },
                 dataType: "json", 
                 success: function (json) { 
                     if(json.code === 1) {
@@ -139,7 +110,7 @@ $(function(){
             appsecret: "应用秘钥不能为空"
         }
     });
-    wxaccount.init();
+    
 //    $("#box-config").modal("show");
     showlist();
 });
@@ -196,12 +167,10 @@ function dateFormat(timestamp,n){
  }
 }
 
-function wxadd() {
-    listClear();
-    $("#box-config").modal("show");
-}
 function wxedit(id) {
     if(cache === null) { return; }
+    wxaccount.init();
+    var obj = null;
     for(var i in cache) {
         if(parseInt(cache[i].id) !== id) { continue; } 
         $('#name').val(cache[i].name); 
@@ -210,6 +179,11 @@ function wxedit(id) {
         $('#remark').val(cache[i].remark);
         $('#id').val(cache[i].id);
         //$('#appid').attr('readonly', 'readonly');
+        $('#token').val(cache[i].token);
+        $('#aeskey').val(cache[i].aeskey);
+        obj = $("input[name=encrypt]:eq("+(parseInt(cache[i].encrypt)-1)+")");
+        obj.parent().addClass('checked');
+        obj.attr("checked",'checked');
         $("#box-config").modal("show");
         return;
     }
