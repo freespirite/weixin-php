@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/css/cloud-admin.css" >
     <link rel="stylesheet" type="text/css"  href="__PUBLIC__/adm/css/themes/default.css" id="skin-switcher" >
     <link rel="stylesheet" type="text/css"  href="__PUBLIC__/adm/css/responsive.css" >
-    <!-- STYLESHEETS --><!--[if lt IE 9]><script src="__PUBLIC__/adm/js/flot/excanvas.min.js"></script><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script><![endif]-->
+    <!-- STYLESHEETS --><!--[if lt IE 9]><script src="__PUBLIC__/adm/js/flot/excanvas.min.js"></script><script src="__PUBLIC__/adm/js/html5.js"></script><script src="__PUBLIC__/adm/js/css3-mediaqueries.js"></script><![endif]-->
     <link href="__PUBLIC__/adm/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- ANIMATE -->
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/css/animatecss/animate.min.css" />
@@ -23,7 +23,7 @@
     <!-- GRITTER -->
     <link rel="stylesheet" type="text/css" href="__PUBLIC__/adm/js/gritter/css/jquery.gritter.css" />
     <!-- FONTS -->
-    <link href='http://fonts.useso.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
+    <link href='__PUBLIC__/adm/css/useso.css' rel='stylesheet' type='text/css'>
     <script><?php echo 'siturl = "'.C('SITE_URL').'";'; ?></script>
     <!-- JQUERY -->
     <script src="__PUBLIC__/adm/js/jquery/jquery-2.0.3.min.js"></script>
@@ -167,17 +167,15 @@
     <script src="__PUBLIC__/adm/js/script.js"></script>
     <script>
         jQuery(document).ready(function() {
+            App.setActive("<?php echo $controller;?>","<?php echo $action;?>");
             <?php
             if(isset($pageSet)) {
                 echo 'App.setPage("'.$pageSet.'");';  //Set current page
             }
-            ?>
-            App.setActive("<?php echo $controller;?>","<?php echo $action;?>");
-            App.init(); //Initialise plugins and elements
-            <?php
             if(isset($pageJsInit)) {
                 echo $pageJsInit;  //Set current page
             }
+            echo 'App.init();'; //Initialise plugins and elements
             ?>
         });
     </script>

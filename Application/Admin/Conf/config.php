@@ -24,22 +24,22 @@ return array(
                     'index' => array('title'=> '我的公众号列表'),
                 ),
             ),
-        'message' => array(
-                'title'=> '信息发布',
-                'flag' => 'fa-pencil-square-o',
-                'sub' => array(
-                    'index' => array('title'=> '关注回复'),
-                    'automsg' => array('title' => '自动回复'),
-                    'massmsg' => array('title' => '消息群发'),
-                    'msgtpl' => array('title' => '消息模板'),
-                ),
-            ),
-        'article' => array(
+        'material' => array(
                 'title'=> '素材管理',
                 'flag' => 'fa-picture-o',
                 'sub' => array(
                     'index' => array('title'=> '我的素材库'),
                     'add' => array('title'=> '素材添加'),
+                ),
+            ),
+        'message' => array(
+                'title'=> '信息发布',
+                'flag' => 'fa-pencil-square-o',
+                'sub' => array(
+                    'index' => array('title'=> '关注回复设置'),
+                    'automsg' => array('title' => '自动回复设置'),
+                    'massmsg' => array('title' => '消息群发'),
+                    'msgtpl' => array('title' => '消息模板'),
                 ),
             ),
         'users' => array(
@@ -61,7 +61,7 @@ return array(
     ),
     
     'USER_WX_LIMIT' => array(
-        '1' => 4, //普通免费用户可以绑定微信号数量
+        '1' => 2, //普通免费用户可以绑定微信号数量
         '2' => 10, //付费用户可以绑定微信号数量
     ),
     /*

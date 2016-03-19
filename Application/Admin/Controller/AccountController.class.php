@@ -67,10 +67,16 @@ class AccountController extends BaseController {
     public function ajaxList() {
         $obj = new UsermpsetModel();
         $list = $obj->getList('uid='.  session(C('ADMIN_SESSION'))['uid'], 'id,name,appid,appsecret,remark,token,aeskey,encrypt,createtime');
-        $add = $obj->checkUserStatus()? 1: 0;
-        $this->ajaxReturn(array('add'=> $add, 'data'=>$list));
+        $this->ajaxReturn(array('data'=>$list));
+//        $add = $obj->checkUserStatus()? 1: 0;
+//        $this->ajaxReturn(array('add'=> $add, 'data'=>$list));
     }
     
+    public function ajaxChkAdd() {
+        $obj = new UsermpsetModel();
+        $add = $obj->checkUserStatus()? 1: 0;
+        $this->ajaxReturn(array('add'=> $add));
+    }
     public function ajaxWxDel() {
         $obj = new UsermpsetModel();
         if($obj->wxDelete(intval(I('post.id')))) {

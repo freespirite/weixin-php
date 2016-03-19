@@ -71,9 +71,8 @@ class UsermpsetModel extends Model {
             return FALSE;
         }
         $this->data['uid'] = session(C('ADMIN_SESSION'))['uid'];
-        $rs = $this->add();
-        $this->error = $rs? '': '添加公众号失败';
-        return $rs;
+        $insertid = $this->add();
+        return $insertid;
     }
     
     public function wxUpdate() {
@@ -83,7 +82,7 @@ class UsermpsetModel extends Model {
             $this->error = '该公众号APPID已经存在';
             return FALSE;
         }
-        $rs = $this->where('id='.$id.' AND uid='. session(C('ADMIN_SESSION'))['uid'])->save();
+        $rs = $this->where('id='.$this->data['id'].' AND uid='. session(C('ADMIN_SESSION'))['uid'])->save();
         if($rs===FALSE) {
             $this->error = '更新失败';
             return FALSE;
@@ -98,14 +97,19 @@ class UsermpsetModel extends Model {
             return FALSE;
         }
         if(!$this->checkUserStatus()) { 
-            $this->error = '超出绑定账号上限';
+            $this->error = '超出绑定账号上限，请联系管理员！';
             return FALSE;
         }
         $this->data['uid'] = session(C('ADMIN_SESSION'))['uid'];
         $this->data['wxaid'] = $this->getUserAid($this->data['appid'], $this->data['appsecret']);
-        $rs = $this->add();
-        $this->error = $rs? '': '添加公众号失败';
-        return $rs;
+        $insertid = $this->add();
+        if($insertid) {
+//            M('cache_wx')->add(array('uid' => $this->data['uid'], 'wxid' => $insertid, 'wxaid' => $this->data['wxaid']));
+        }
+        else {
+            $this->error = '添加公众号失败';
+        }
+        return $insertid;
     }
 
     public function wxDelete($id) {
@@ -115,6 +119,7 @@ class UsermpsetModel extends Model {
             $this->error = '删除失败';
             return FALSE;
         }
+//        M('cache_wx')->where('uid='.session(C('ADMIN_SESSION'))['uid'].' AND wxid='.$id)->delete();
         return TRUE;
     }
     
@@ -128,6 +133,11 @@ class UsermpsetModel extends Model {
         return $this->where('uid='.session(C('ADMIN_SESSION'))['uid'].' AND appid="%s"', array($appid))->find();
     }
     
+    public function getInfo($id) {
+        return $this->where('id=%d AND uid='.session(C('ADMIN_SESSION'))['uid'], array($id))->find();
+    }
+
+
     /*
      * 检查可以绑定的微信号数量是否超出限制
      */

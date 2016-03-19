@@ -55,5 +55,16 @@ return array(
     'DATA_CACHE_TIMEOUT'    => '',
     */
     
+    //微信消息类型
+    'MSG_TYPE' => array(
+        1 => 'text',   //文本消息
+        2 => 'mpnews', //图文消息
+        3 => 'voice',  //语音
+        4 => 'music',  //音乐
+        5 => 'image',  //图片
+        6 => 'video',  //视频
+        7 => 'wxcard', //卡券
+    ),
+    
 );
 

@@ -254,10 +254,6 @@ echo 'var encryptType = '.json_encode($aryRadios).';';
 
 <script type="text/javascript">
     $(function(){
-//        $(".form-control-static").each(function(){
-//            var name = $(this).attr("data-display");
-//            var txt = $("input[name='"+name+"']").val();
-//            $(this).html(txt);
-//        });
+        checkAdd();
     });
 </script>

@@ -123,7 +123,7 @@ function showlist() {
         dataType: "json", 
         success: function (json) {
             var str = new Array();
-            json.add === 1? $('.box-title h5').show(): $('.box-title h5').hide();
+            //json.add === 1? $('.box-title h5').show(): $('.box-title h5').hide();
             if(json.data.length <= 0) { cache = null;return; }
             cache = json.data;
             for(var i=0; i<json.data.length; i++) {

@@ -1,7 +1,7 @@
 <?php
 namespace Common\Library\Weixin;
 
-class Content extends Base {
+class Message extends Base {
 
     public function sendmsg()
     {

@@ -305,3 +305,33 @@ var addWizard = function () {
         }
     };
 }();
+
+function checkAdd() {
+    $.ajax({ 
+        type: "post", 
+        url: siturl +"Admin/Account/ajaxChkAdd",
+        data: {mt: parseInt(Math.random()*1000)},
+        dataType: "json", 
+        success: function (json) {
+            if(json.add === 1) { return; }
+            $('.prevBtn').attr('disabled', 'disabled');
+            $('.nextBtn').attr('disabled', 'disabled');
+            $('.submitBtn').attr('disabled', 'disabled');
+            bootbox.dialog({
+                message: "你目前的账号权限已经不能添加更多的公众号，请联系管理员提升账号等级！",
+                buttons: {
+                    main: {
+                        label: "返回我的列表",
+                        className: "btn-primary",
+                        callback: function() {
+                            location.href = siturl + "Admin/Account/index";
+                        }
+                    }
+                }
+            });
+        }, 
+        error: function (XMLHttpRequest, textStatus, errorThrown) { 
+            bootbox.alert(errorThrown);
+        }
+    });
+}
