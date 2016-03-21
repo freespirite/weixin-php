@@ -1,10 +1,42 @@
+<link rel="stylesheet" href="__PUBLIC__/adm/kedit/themes/default/default.css" />
+<script src="__PUBLIC__/adm/kedit/kindeditor-min.js"></script>
+<style>
+
+</style>
+<script>
+KindEditor.ready(function(K) {
+    var el = jQuery(".modal-body");
+    var uploadbutton = K.uploadbutton({
+        button : K('#uploadButton')[0],
+        fieldName : 'imgFile',
+        url : '__PUBLIC__/adm/kedit/php/upload_json.php?dir=image',
+        afterUpload : function(data) {
+            if (data.error === 0) {
+                var url = K.formatUrl(data.url, 'absolute');
+                K('#url').val(url);
+            } else {
+                alert(data.message);
+            }
+            App.unblockUI(el);
+        },
+        afterError : function(str) {
+            App.unblockUI(el);
+            alert('自定义错误信息: ' + str);
+        }
+    });
+    uploadbutton.fileBox.change(function(e) {
+        uploadbutton.submit();
+        App.blockUI(el);
+    });
+});
+</script>
 <div class="row">
     <div class="col-md-12">
             <!-- BOX -->
             <div class="box">
                     <div class="box-title">
                        <h4><i class="fa fa-bars"></i>图片列表</h4>
-                       &nbsp;<button class="btn btn-xs btn-success"><i class="fa fa-plus"></i> 新增图片素材</button>
+                       &nbsp;<input type="button" id="uploadButton" value="新增图片素材" >
                     </div>
                     <div class="box-body clearfix">
                        <div id="filter-controls" class="btn-group">

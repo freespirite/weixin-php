@@ -3361,7 +3361,7 @@ var App = function () {
         blockUI: function (el, loaderOnTop) {
             lastBlockedUI = el;
             jQuery(el).block({
-                message: '<img src="../../data/adm/img/loaders/12.gif" align="absmiddle">',
+                message: '<img src="../../data/adm/img/loaders/3.gif" align="absmiddle">',
                 css: {
                     border: 'none',
                     padding: '2px',
@@ -3369,7 +3369,7 @@ var App = function () {
                 },
                 overlayCSS: {
                     backgroundColor: '#000',
-                    opacity: 0.05,
+                    opacity: 0.25,
                     cursor: 'wait'
                 }
             });
