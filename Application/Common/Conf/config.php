@@ -21,7 +21,7 @@ return array(
     'ADMIN_SESSION'     => 'wxadmin',
     'DEFAULT_MODULE'    => 'Home',
 
-    'SITE_URL'          => 'http://localhost/gdsell/weixin-php/Public/',//网站地址
+    'SITE_URL'          => 'http://localhost/weixin-php/Public/',//网站地址
 
     'TMPL_PARSE_STRING'  =>array(
         '__PUBLIC__'     =>  __ROOT__.'/data', // 更改默认的/Public 替换规则
