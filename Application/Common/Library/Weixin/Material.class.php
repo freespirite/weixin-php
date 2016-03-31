@@ -8,10 +8,7 @@ namespace Common\Library\Weixin;
 class Material extends Base {
     
     public function upload() {
-        //上传图片素材，不算入素材数量中，小于1M
-        $url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxe9196434f60eb841&secret=21a579faa1d6e30d2825ad6345c2d7e1';
-        $con = file_get_contents($url);
-        $aryToken = json_decode($con, 1);
+        $rsToken = new Token;
         if(!isset($aryToken['access_token'])) { exit('error: '.$con); }
 
         $file = '/data/www/weixin/demo.jpg'; //要上传的文件

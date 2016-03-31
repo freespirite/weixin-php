@@ -9,9 +9,20 @@ $aryDaohang = C('MENU_ARRAY')[strtolower(CONTROLLER_NAME)];
     <li>
         <a href="#"><?php echo $aryDaohang['title'];?></a>
     </li>
-    <li>
-        <?php echo $aryDaohang['sub'][ACTION_NAME]['title'];?> 
-    </li>
+    <?php
+    if(isset($aryDaohang['sub'])) {
+        $action = strtolower(ACTION_NAME);
+        foreach ($aryDaohang['sub'] as $k => $v) {
+            $aryAct = explode(',', $k);
+            foreach($aryAct as $val) {
+                if($action == $val) {
+                    echo '<li>'.$v['title'].'</li>';
+                    break 2;
+                }
+            }
+        }
+    }
+    ?>
 </ul>
 <!-- /BREADCRUMBS 
 <div class="clearfix">

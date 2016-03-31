@@ -1,42 +1,41 @@
 <link rel="stylesheet" href="__PUBLIC__/adm/kedit/themes/default/default.css" />
 <script src="__PUBLIC__/adm/kedit/kindeditor-min.js"></script>
-<style>
+<script src="__PUBLIC__/adm/kedit/lang/zh_CN.js"></script>
 
-</style>
+<?php
+//echo json_encode($aryWx);exit;
+?>
 <script>
+//var wxAccount = {'apid01' : 'first','apid02' : 'second','apid03' : 'third'};
+var wxAccount = <?php echo json_encode($aryWx);?>;
 KindEditor.ready(function(K) {
-    var el = jQuery(".modal-body");
-    var uploadbutton = K.uploadbutton({
-        button : K('#uploadButton')[0],
-        fieldName : 'imgFile',
-        url : '__PUBLIC__/adm/kedit/php/upload_json.php?dir=image',
-        afterUpload : function(data) {
-            if (data.error === 0) {
-                var url = K.formatUrl(data.url, 'absolute');
-                K('#url').val(url);
-            } else {
-                alert(data.message);
-            }
-            App.unblockUI(el);
-        },
-        afterError : function(str) {
-            App.unblockUI(el);
-            alert('自定义错误信息: ' + str);
-        }
+    var editor = K.editor({
+            allowFileManager : false,
+            uploadJson : "{:U('material/upload',array('type'=>'image'))}"
     });
-    uploadbutton.fileBox.change(function(e) {
-        uploadbutton.submit();
-        App.blockUI(el);
+    K('#wxupload').click(function() {
+        editor.loadPlugin('image', function() {
+            editor.plugin.imageDialog({
+                showRemote : false,
+                imageUrl : K('#url3').val(),
+                clickFn : function(url, title, width, height, border, align) {
+                    K('#url3').val(url);
+                    editor.hideDialog();
+                }
+            });
+        });
     });
+
 });
 </script>
+
 <div class="row">
     <div class="col-md-12">
             <!-- BOX -->
             <div class="box">
                     <div class="box-title">
                        <h4><i class="fa fa-bars"></i>图片列表</h4>
-                       &nbsp;<input type="button" id="uploadButton" value="新增图片素材" >
+                       &nbsp;<button id="wxupload" class="btn btn-xs btn-success"><i class="fa fa-plus-square"></i> 新建图文素材</button>
                     </div>
                     <div class="box-body clearfix">
                        <div id="filter-controls" class="btn-group">
@@ -58,6 +57,21 @@ KindEditor.ready(function(K) {
                           </div>
                        </div>
                             <div id="filter-items" class="row">
+                                <div class="col-md-3 category_1 item">
+                                        <div class="filter-content">
+                                                <img id="demo01" src="__PUBLIC__/adm/img/gallery/1.png" alt="" class="img-responsive" />
+                                                <div class="hover-content">
+                                                        <h4>Image Title</h4>
+                                                        <a class="btn btn-success hover-link">
+                                                                <i class="fa fa-edit fa-1x"></i>
+                                                        </a>
+                                                        <a class="btn btn-warning hover-link colorbox-button" id="demo02" href="__PUBLIC__/adm/img/gallery/1.png" title="Image Title">
+                                                                <i class="fa fa-search-plus fa-1x"></i>
+                                                        </a>
+                                                </div>
+                                        </div>
+                                </div>
+                                
                                     <div class="col-md-3 category_1 item">
                                             <div class="filter-content">
                                                     <img src="__PUBLIC__/adm/img/gallery/1.png" alt="" class="img-responsive" />

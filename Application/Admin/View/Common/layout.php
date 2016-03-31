@@ -167,7 +167,7 @@
     <script src="__PUBLIC__/adm/js/script.js"></script>
     <script>
         jQuery(document).ready(function() {
-            App.setActive("<?php echo $controller;?>","<?php echo $action;?>");
+            //App.setActive("controller","action");
             <?php
             if(isset($pageSet)) {
                 echo 'App.setPage("'.$pageSet.'");';  //Set current page

@@ -28,7 +28,7 @@ return array(
                 'title'=> '素材管理',
                 'flag' => 'fa-picture-o',
                 'sub' => array(
-                    'index' => array('title'=> '我的素材库'),
+                    'index,images' => array('title'=> '我的素材库'),
                     'add' => array('title'=> '素材添加'),
                 ),
             ),
@@ -42,6 +42,7 @@ return array(
                     'msgtpl' => array('title' => '消息模板'),
                 ),
             ),
+        /*
         'users' => array(
                 'title'=> '用户管理',
                 'flag' => 'fa-picture-o',
@@ -58,6 +59,7 @@ return array(
                     'index' => array('title'=> '用户分析'),
                 ),
             ),
+         */
     ),
     
     'USER_WX_LIMIT' => array(

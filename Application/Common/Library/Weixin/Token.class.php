@@ -1,11 +1,6 @@
 <?php
 namespace Common\Library\Weixin;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+use Admin\Model\CacheTokenModel;
 /**
  * Description of Token
  *
@@ -14,23 +9,39 @@ namespace Common\Library\Weixin;
 class Token extends Base {
     
     private function _createTokenUrl() {
-        $aryUrl['appid'] = self::$wxappid;
-        $aryUrl['secret'] = self::$wxappsecret;
+        $aryUrl['appid'] = self::$wxconf['appid'];
+        $aryUrl['secret'] = self::$wxconf['appsecret'];
+        if(!$aryUrl['appid'] || !$aryUrl['secret']) {
+            return $this->result('appid或secret不能为空', 0);
+        }
         $aryUrl['grant_type'] = 'client_credential';
-        return 'https://api.weixin.qq.com/cgi-bin/token?'.$this->urlParams($aryUrl);
+        return $this->result('https://api.weixin.qq.com/cgi-bin/token?'.$this->urlParams($aryUrl));
     }
     
-    public function getToken() {
-        $con = file_get_contents($this->_createTokenUrl());
+    public function getToken($wid) {
+        $obj = new CacheTokenModel;
+        $info = $obj->getOne($wid);
+        if($info && $info['timeOut'] > time()) {
+            return $this->result($info['token']);
+        }
+        $add = $info? TRUE: FALSE;
+        $rs  = $this->_createTokenUrl();
+        if(!$rs[0]) { return $rs; }
+        $con = file_get_contents($rs[1]);
         $ary = json_decode($con);
         if(isset($ary['access_token'])) { 
-            return $ary;
+            if($add) {
+                $rs = $obj->addNew($wid, $ary['access_token'], $ary['expires_in']);
+            } else {
+                $rs = $obj->update($wid, $ary['access_token'], $ary['expires_in']);
+            }
+            return $rs!==FALSE? $this->result($ary['access_token']): $this->result('写入数据失败', 0);;
         }
         else if(isset($ary['errmsg'])) {
-            $this->sysExit($ary['errmsg'], $ary['errcode']);
+            return $this->result($ary['errmsg'], $ary['errcode']);
         }
         else {
-            $this->sysExit('网络问题或接口无响应');
+            return $this->result('网络问题或接口无响应',0);
         }
     }
 }

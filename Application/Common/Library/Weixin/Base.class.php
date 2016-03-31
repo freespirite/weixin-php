@@ -13,7 +13,7 @@ namespace Common\Library\Weixin;
  */
 class Base {
     //put your code here
-    public $wxconf = array(
+    public static $wxconf = array(
             'token' => '',
             'appid' => '', 
             'mchid' => '',
@@ -22,18 +22,22 @@ class Base {
             'sslcert'     => '',
             'sslkey'      => '',
         );
-    
+
+    public static $result = 0; //中断结果输出数据类型，1=json，0=普通页面输出
+        
     protected $xmlValues = array();
     
     protected $values = array();
     
-    public function __construct($conf)
+    public function setConf($conf)
     {    
-        foreach ($this->wxconf as $key => $val) {
+        foreach (self::$wxconf as $key => $val) {
+//            if(!isset($conf[$key])) {
+//                E('config key: '.$key.' not set');
+//                continue;
+//            }
             $val = trim($conf[$key]);
-//            if(!isset($conf[$key]) || !$val) { E('config key: '.$key.' not set or value empty'); }
-            if(!isset($conf[$key])) { E('config key: '.$key.' not set'); }
-            $this->wxconf[$key] = $val;
+            self::$wxconf[$key] = $val;
         }
     }
     
@@ -106,11 +110,11 @@ class Base {
     
     private function _checkSignature()
     {
-        if(!$this->wxconf['token']) { E('config token error'); }
+        if(!self::$wxconf['token']) { E('config token error'); }
         $signature = trim(I('get.signature'));
         $timestamp = trim(I('get.timestamp'));
         $nonce = trim(I('get.nonce'));
-        $tmpArr = array($this->wxconf['token'], $timestamp, $nonce);
+        $tmpArr = array(self::$wxconf['token'], $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
@@ -137,10 +141,21 @@ class Base {
     
     protected function sysExit($error = '操作错误', $errorNum = '101') {
         //$this->logs($error, $errorNum);
-        echo json_encode(array('code' => $errorNum, 'msg' => $error));
-        exit;
+        if(self::$result) {
+            echo is_array($error)?json_encode($error): json_encode(array('code' => $errorNum, 'msg' => $error));
+            exit;
+        }
+        else {
+            E($errorNum.':'.$error);
+        }
+        
     }
     
+    protected function result($result, $code=1) {
+        return array($code, $result);
+    }
+
+
     private function _cacheSetToken($token, $uid, $timeOut = 7200) {
         $cache = \Think\Cache::getInstance('File');
         $cache->set('wx_token_'.$uid, $token, $timeOut);
@@ -166,8 +181,8 @@ class Base {
     }
     
     private function _createTokenUrl() {
-        $aryUrl['appid'] = $this->wxconf['wxappid'];
-        $aryUrl['secret'] = $this->wxconf['wxappsecret'];
+        $aryUrl['appid'] = self::$wxconf['wxappid'];
+        $aryUrl['secret'] = self::$wxconf['wxappsecret'];
         $aryUrl['grant_type'] = 'client_credential';
         return 'https://api.weixin.qq.com/cgi-bin/token?'.$this->urlParams($aryUrl);
     }

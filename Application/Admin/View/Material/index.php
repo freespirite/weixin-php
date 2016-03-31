@@ -11,7 +11,6 @@
 <!-- BLOCK UI -->
 <script type="text/javascript" src="__PUBLIC__/adm/js/jQuery-BlockUI/jquery.blockUI.min.js"></script>
 
-        
 <!-- PAGE HEADER-->
 <div class="row">
         <div class="col-sm-12">
@@ -33,15 +32,28 @@
             <div class="box-body">
                 <div class="tabbable header-tabs">
                   <ul class="nav nav-tabs">
-                      <li><a href="#box_tab2" data-toggle="tab"><i class="fa fa-book"></i> <span class="hidden-inline-mobile">图文素材</span></a></li>
-                      <li class="active"><a href="#box_tab1" data-toggle="tab"><i class="fa fa-picture-o"></i> <span class="hidden-inline-mobile">图片素材</span></a></li>
+                    <?php
+                    //echo __ROOT__;exit;
+                    //print_r($aryType);echo $type.' >>>>>>>>>>>> ';exit;
+                    $count = count($aryType);
+                    $i = 0;
+                    foreach($aryType as $key => $val) {
+                        $i++;
+                        $active = $type == $key? ' class="active"': '';
+                    ?>
+                      <li{$active}><a href="{:U('material/'.$key)}"><i class="fa {$val[1]}"></i> <span class="hidden-inline-mobile">{$val[0]}</span></a></li>
+                    <?php }?>
                   </ul>
                   <div class="tab-content">
                      <div class="tab-pane fade in active" id="box_tab1">
-                        <include file="Material/index_tab2"/>
+                        <if condition="$type eq 'images'">
+                        <include file="Material/index_images"/>
+                        <else />
+                        <include file="Material/index_index"/>
+                        </if>
                      </div>
-                     <div class="tab-pane" id="box_tab2">
-                       <include file="Material/index_tab1"/>
+                     <!--<div class="tab-pane" id="box_tab2">
+                       <include file="Material/index_tab2"/>-->
                      </div>
                   </div>
                </div>

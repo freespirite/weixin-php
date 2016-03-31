@@ -19,6 +19,7 @@ KindEditor.plugin('image', function(K) {
 		extraParams = K.undef(self.extraFileUploadParams, {}),
 		filePostName = K.undef(self.filePostName, 'imgFile'),
 		fillDescAfterUploadImage = K.undef(self.fillDescAfterUploadImage, false),
+        //wxAccountopt = K.undef(wxAccount, {}),
 		lang = self.lang(name + '.');
 
 	self.plugin.imageDialog = function(options) {
@@ -36,56 +37,77 @@ KindEditor.plugin('image', function(K) {
 		for(var k in extraParams){
 			hiddenElements.push('<input type="hidden" name="' + k + '" value="' + extraParams[k] + '" />');
 		}
+
+        var wxary = new Array();
+		var wxnum = 0;
+		var wxchecked = '';
+        if (typeof(wxAccount) !== "undefined") {
+            for(var key in wxAccount) {
+                wxary.push('<div class="ke-dialog-row">');
+                if(wxnum > 0) {
+                    wxary.push('<label style="width:60px;">&nbsp;</label>');
+                } else {
+                    wxary.push('<label style="width:60px;">上传到</label>');
+                }
+                wxchecked = wxnum > 0? '': ' checked="checked"';
+                wxary.push('<input type="radio" name="wxapid" class="ke-inline-block" value="'+wxAccount[key]['id']+'"'+wxchecked+'>'+wxAccount[key]['name']+'&nbsp;');
+                wxary.push('</div>');
+                wxnum++;
+            }
+        }
+		//alert(wxAccount);
+
 		var html = [
-			'<div style="padding:20px;">',
-			//tabs
-			'<div class="tabs"></div>',
-			//remote image - start
-			'<div class="tab1" style="display:none;">',
-			//url
-			'<div class="ke-dialog-row">',
-			'<label for="remoteUrl" style="width:60px;">' + lang.remoteUrl + '</label>',
-			'<input type="text" id="remoteUrl" class="ke-input-text" name="url" value="" style="width:200px;" /> &nbsp;',
-			'<span class="ke-button-common ke-button-outer">',
-			'<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
-			'</span>',
-			'</div>',
-			//size
-			'<div class="ke-dialog-row">',
-			'<label for="remoteWidth" style="width:60px;">' + lang.size + '</label>',
-			lang.width + ' <input type="text" id="remoteWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> ',
-			lang.height + ' <input type="text" class="ke-input-text ke-input-number" name="height" value="" maxlength="4" /> ',
-			'<img class="ke-refresh-btn" src="' + imgPath + 'refresh.png" width="16" height="16" alt="" style="cursor:pointer;" title="' + lang.resetSize + '" />',
-			'</div>',
-			//align
-			'<div class="ke-dialog-row">',
-			'<label style="width:60px;">' + lang.align + '</label>',
-			'<input type="radio" name="align" class="ke-inline-block" value="" checked="checked" /> <img name="defaultImg" src="' + imgPath + 'align_top.gif" width="23" height="25" alt="" />',
-			' <input type="radio" name="align" class="ke-inline-block" value="left" /> <img name="leftImg" src="' + imgPath + 'align_left.gif" width="23" height="25" alt="" />',
-			' <input type="radio" name="align" class="ke-inline-block" value="right" /> <img name="rightImg" src="' + imgPath + 'align_right.gif" width="23" height="25" alt="" />',
-			'</div>',
-			//title
-			'<div class="ke-dialog-row">',
-			'<label for="remoteTitle" style="width:60px;">' + lang.imgTitle + '</label>',
-			'<input type="text" id="remoteTitle" class="ke-input-text" name="title" value="" style="width:200px;" />',
-			'</div>',
-			'</div>',
-			//remote image - end
-			//local upload - start
-			'<div class="tab2" style="display:none;">',
-			'<iframe name="' + target + '" style="display:none;"></iframe>',
-			'<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + K.addParam(uploadJson, 'dir=image') + '">',
-			//file
-			'<div class="ke-dialog-row">',
-			hiddenElements.join(''),
-			'<label style="width:60px;">' + lang.localUrl + '</label>',
-			'<input type="text" name="localUrl" class="ke-input-text" tabindex="-1" style="width:200px;" readonly="true" /> &nbsp;',
-			'<input type="button" class="ke-upload-button" value="' + lang.upload + '" />',
-			'</div>',
-			'</form>',
-			'</div>',
-			//local upload - end
-			'</div>'
+                    '<div style="padding:20px;">',
+                    //tabs
+                    '<div class="tabs"></div>',
+                    //remote image - start
+                    '<div class="tab1" style="display:none;">',
+                    //url
+                    '<div class="ke-dialog-row">',
+                    '<label for="remoteUrl" style="width:60px;">' + lang.remoteUrl + '</label>',
+                    '<input type="text" id="remoteUrl" class="ke-input-text" name="url" value="" style="width:200px;" /> &nbsp;',
+                    '<span class="ke-button-common ke-button-outer">',
+                    '<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
+                    '</span>',
+                    '</div>',
+                    //size
+                    '<div class="ke-dialog-row">',
+                    '<label for="remoteWidth" style="width:60px;">' + lang.size + '</label>',
+                    lang.width + ' <input type="text" id="remoteWidth" class="ke-input-text ke-input-number" name="width" value="" maxlength="4" /> ',
+                    lang.height + ' <input type="text" class="ke-input-text ke-input-number" name="height" value="" maxlength="4" /> ',
+                    '<img class="ke-refresh-btn" src="' + imgPath + 'refresh.png" width="16" height="16" alt="" style="cursor:pointer;" title="' + lang.resetSize + '" />',
+                    '</div>',
+                    //align
+                    '<div class="ke-dialog-row">',
+                    '<label style="width:60px;">' + lang.align + '</label>',
+                    '<input type="radio" name="align" class="ke-inline-block" value="" checked="checked" /> <img name="defaultImg" src="' + imgPath + 'align_top.gif" width="23" height="25" alt="" />',
+                    ' <input type="radio" name="align" class="ke-inline-block" value="left" /> <img name="leftImg" src="' + imgPath + 'align_left.gif" width="23" height="25" alt="" />',
+                    ' <input type="radio" name="align" class="ke-inline-block" value="right" /> <img name="rightImg" src="' + imgPath + 'align_right.gif" width="23" height="25" alt="" />',
+                    '</div>',
+                    //title
+                    '<div class="ke-dialog-row">',
+                    '<label for="remoteTitle" style="width:60px;">' + lang.imgTitle + '</label>',
+                    '<input type="text" id="remoteTitle" class="ke-input-text" name="title" value="" style="width:200px;" />',
+                    '</div>',
+                    '</div>',
+                    //remote image - end
+                    //local upload - start
+                    '<div class="tab2" style="display:none;">',
+                    '<iframe name="' + target + '" style="display:none;"></iframe>',
+                    '<form class="ke-upload-area ke-form" method="post" enctype="multipart/form-data" target="' + target + '" action="' + K.addParam(uploadJson, 'dir=image') + '">',
+                    //file
+                    wxary.join(''),
+                    '<div class="ke-dialog-row">',
+                    hiddenElements.join(''),
+                    '<label style="width:60px;">' + lang.localUrl + '</label>',
+                    '<input type="text" name="localUrl" class="ke-input-text" tabindex="-1" style="width:200px;" readonly="true" /> &nbsp;',
+                    '<input type="button" class="ke-upload-button" value="' + lang.upload + '" />',
+                    '</div>',
+                    '</form>',
+                    '</div>',
+                    //local upload - end
+                    '</div>'
 		].join('');
 		var dialogWidth = showLocal || allowFileManager ? 450 : 400,
 			dialogHeight = showLocal && showRemote ? 300 : 250;
