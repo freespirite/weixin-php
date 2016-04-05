@@ -133,8 +133,8 @@ class UsermpsetModel extends Model {
         return $this->where('uid='.session(C('ADMIN_SESSION'))['uid'].' AND appid="%s"', array($appid))->find();
     }
     
-    public function getInfo($id) {
-        return $this->where('id=%d AND uid='.session(C('ADMIN_SESSION'))['uid'], array($id))->find();
+    public function getInfo($id, $field='*') {
+        return $this->where('id=%d AND uid='.session(C('ADMIN_SESSION'))['uid'], array($id))->field($field)->find();
     }
 
 

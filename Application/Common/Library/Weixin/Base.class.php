@@ -18,13 +18,14 @@ class Base {
             'appid' => '', 
             'mchid' => '',
             'key'   => '',
+            'aeskey' => '',
             'appsecret' => '',
             'sslcert'     => '',
             'sslkey'      => '',
         );
 
-    public static $result = 0; //中断结果输出数据类型，1=json，0=普通页面输出
-        
+    public $result = 0; //中断结果输出数据类型，1=json，0=普通页面输出
+    public static $errors = '';
     protected $xmlValues = array();
     
     protected $values = array();
@@ -32,10 +33,6 @@ class Base {
     public function setConf($conf)
     {    
         foreach (self::$wxconf as $key => $val) {
-//            if(!isset($conf[$key])) {
-//                E('config key: '.$key.' not set');
-//                continue;
-//            }
             $val = trim($conf[$key]);
             self::$wxconf[$key] = $val;
         }
@@ -141,7 +138,7 @@ class Base {
     
     protected function sysExit($error = '操作错误', $errorNum = '101') {
         //$this->logs($error, $errorNum);
-        if(self::$result) {
+        if($this->result) {
             echo is_array($error)?json_encode($error): json_encode(array('code' => $errorNum, 'msg' => $error));
             exit;
         }

@@ -6,7 +6,7 @@
  */
 namespace Admin\Controller;
 use Admin\Model\UsermpsetModel;
-use Common\Library\Weixin\Token;
+use Common\Library\Weixin\Material;
 
 class MaterialController extends BaseController {
     private $_aryType = array(
@@ -16,13 +16,13 @@ class MaterialController extends BaseController {
 
     public function index()
     {
-//        echo __APP__ ;exit;
+//        echo WEB_PATH  ;exit;
         $this->_showtpl(__FUNCTION__);
     }
     
     public function images()
     {
-//        echo __APP__ ;exit;
+        //echo __APP__ ;exit;
         $obj = new UsermpsetModel;
         $this->assign('pageSet', 'gallery');
         $this->assign('aryWx', $obj->getList('uid='.session(C('ADMIN_SESSION'))['uid'], 'id,name,appid'));
@@ -59,15 +59,17 @@ class MaterialController extends BaseController {
                 $url = $upload->rootPath.$file['savepath'].$file['savename'];
             }
             $objWX = new UsermpsetModel;
-            $wxInfo = $objWX->getInfo($id);
+            $wxInfo = $objWX->getInfo($wid);
             if(!$wxInfo) {
-                exit(json_encode(array('error'=>1, 'message'=>'对应操作的账号信息没有找到')));
+                $this->ajaxReturn(array('error'=>1, 'message'=>'对应操作的账号信息没有找到'));
             }
             $conf = array(
                 'appid' => $wxInfo['appid'], 
                 'appsecret' => $wxInfo['appsecret'],
             );
-            exit(json_encode(array('error'=>0, 'url'=>__APP__.substr($url,1))));
+            $material = new Material($conf);
+            $material->upload($wid, WEB_PATH.substr($url,2));
+            $this->ajaxReturn(array('error'=>0, 'url'=>__APP__.substr($url,1)));
         }
     }
 }

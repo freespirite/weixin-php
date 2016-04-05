@@ -19,6 +19,7 @@ define('APP_DEBUG',True);
 
 // 定义应用目录
 define('APP_PATH','./../Application/');
+define('WEB_PATH', dirname(__FILE__).'/');
 
 //define('BIND_MODULE','Api');
 //引入依赖包的自动加载
