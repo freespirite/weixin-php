@@ -1,0 +1,55 @@
+<admintpl file="header" />
+<link href="__PUBLIC__/css/extend.css" rel="stylesheet" />
+
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="javascript:void(0);">{:L('ADMIN_WEIXIN_REPLY_INDEX')}</a></li>
+			<li><a href="{:U('Reply/auto')}">{:L('ADMIN_WEIXIN_REPLY_AUTO')}</a></li>
+                        <li><a href="{:U('Reply/kw')}">{:L('ADMIN_WEIXIN_REPLY_KW')}</a></li>
+		</ul>
+            <if condition="$wxid eq 0">
+                <div class="well">
+                    公众号：&nbsp;还没有绑定公众号，<a class="toset" href="{:U('Index/add')}">点击这里进行绑定操作</a>
+		</div>
+            <else />
+                <div class="well">
+                    公众号：&nbsp;
+                        <foreach name="rows" item="row" >
+                            <if condition="$wxid eq $row['id'] ">
+                                <a class="active" href="javascript:void(0);">{$row['name']}</a>
+                            <else />
+                                <a href="{:U('Reply/index','wxid=')}{$row['id']}">{$row['name']}</a>
+                            </if>
+                        </foreach>
+		</div>
+            
+		<form class="form-horizontal js-ajax-form" action="{:U('Reply/infoPost')}" method="post">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label">回复内容</label>
+					<div class="controls">
+						<textarea name="info" rows="10" cols="30" id="info" class="inputtext countable" data-limit="500">{$addInfo}</textarea>
+                                                <p class="help-block">你还可输入 <span id="counter" class="safe">500</span> 字.</p>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+                                <input type="hidden" name="wxid" value="{$wxid}">
+                                <input type="hidden" name="cate" value="{$cate}">
+			</div>
+		</form>
+            </if>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/countable/jquery.simplyCountable.min.js"></script>
+        <script>
+            $(function(){
+                $('.countable').simplyCountable({maxCount:500, strictMax: true});
+            });
+        </script>
+</body>
+</html>

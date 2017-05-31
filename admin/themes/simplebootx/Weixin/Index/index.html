@@ -1,0 +1,66 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('Index/index')}">{:L('ADMIN_WEIXIN_INDEX')}</a></li>
+			<li><a href="{:U('Index/add')}">{:L('ADMIN_WEIXIN_ADD')}</a></li>
+		</ul>
+			<table class="table table-hover table-bordered table-list" id="menus-table">
+				<thead>
+                                    <tr>
+                                        <th width="42">二维码</th>
+                                        <th>公众号名称</th>
+                                        <th>类型</th>
+                                        <th>公众号状况</th>
+                                        <th>对接地址</th>
+                                        <th width="120">{:L('ACTIONS')}</th>
+                                    </tr>
+				</thead>
+				<tbody>
+					{$lists}
+				</tbody>
+			</table>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+	<script>
+		$(document).ready(function() {
+			Wind.css('treeTable');
+			Wind.use('treeTable', function() {
+				$("#menus-table").treeTable({
+					indent : 20
+				});
+			});
+		});
+
+		setInterval(function() {
+			var refersh_time = getCookie('refersh_time_admin_weixin_index');
+			if (refersh_time == 1) {
+				reloadPage(window);
+			}
+		}, 1000);
+		setCookie('refersh_time_admin_weixin_index', 0);
+/*
+var timer;
+Wind.use("artDialog", function() {
+    art.dialog({
+        content: '时间越来越少，越来越少..',
+        init: function () {
+            var that = this, i = 5;
+            var fn = function () {
+                that.title(i + '秒后关闭');
+                !i && that.close();
+                i --;
+            };
+            timer = setInterval(fn, 1000);
+            fn();
+        },
+        close: function () {
+            clearInterval(timer);
+        }
+    }).show();
+});
+*/
+	</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Menu/index')}">微信自定义菜单</a></li>
+			<li class="active"><a href="javascript:void(0);">微信菜单修改</a></li>
+		</ul>
+            
+                <div class="well">
+                    公众号: {$wxname}
+                    <if condition="$menu['type'] neq 'view'">
+                        <font color="red">（目前只支持连接形式,提交后其它非链接菜单将被过滤）</font>
+                    </if>
+		</div>
+            
+                <form class="form-horizontal js-ajax-form" action="{:U('Menu/edit')}" method="post">
+                    <fieldset>
+                        <if condition="$parent neq ''">
+                        <div class="control-group">
+                            <label class="control-label">上级菜单：</label>
+                            <div class="controls">{$parent}</div>
+                        </div>
+                        </if>
+                        <div class="control-group">
+                            <label class="control-label">菜单名称：</label>
+                            <div class="controls">
+                                <input type="text" name="name" value="{$menu['name']}" style="width:50%;" maxlength="8"> (字数不超过4个汉字或8个字母)
+                            </div>
+                        </div>
+                        
+                        <if condition="$hassub eq 0">
+                        <div class="control-group">
+                            <label class="control-label">外链地址：</label>
+                            <div class="controls">
+                                <input type="text" name="url" value="{$menu['url']}" style="width:50%;">
+                            </div>
+                        </div>
+                        </if>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+                        <a class="btn" href="{:U('Menu/index', array('wxid'=>$wxid))}">{:L('BACK')}</a>
+                        <input type="hidden" name="wxid" value="{$wxid}">
+                        <input type="hidden" name="pid" value="{$pid}">
+                        <input type="hidden" name="sid" value="{$sid}">
+                    </div>
+                </form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+        <script>
+            
+        </script>
+</body>
+</html>

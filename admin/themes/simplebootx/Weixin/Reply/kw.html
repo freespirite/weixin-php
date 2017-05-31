@@ -1,0 +1,87 @@
+<admintpl file="header" />
+<link href="__PUBLIC__/css/extend.css" rel="stylesheet" />
+<style>
+td span {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0 5px 0 5px;
+    margin-right: 10px;
+    background-color: #e5e7ec;
+}
+</style>
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Reply/index')}">{:L('ADMIN_WEIXIN_REPLY_INDEX')}</a></li>
+			<li><a href="{:U('Reply/auto')}">{:L('ADMIN_WEIXIN_REPLY_AUTO')}</a></li>
+                        <li class="active"><a href="javascript:void(0);">{:L('ADMIN_WEIXIN_REPLY_KW')}</a></li>
+		</ul>
+            
+                <div class="well">
+                    公众号：&nbsp;
+                        <foreach name="rows" item="row" >
+                            <if condition="$wxid eq $row['id'] ">
+                                <a class="active" href="javascript:void(0);">{$row['name']}</a>
+                            <else />
+                                <a href="{:U('Reply/kw','wxid=')}{$row['id']}">{$row['name']}</a>
+                            </if>
+                        </foreach>
+		</div>
+            
+
+            <div class="table-actions">
+                <a href="{:U('Reply/kwAdd', array('wxid'=>$wxid))}" class="btn btn-info btn-small" >新增规则</a>
+            </div>
+            <table class="table table-hover table-bordered table-list" id="menus-table">
+                <thead>
+                    <tr>
+                        <th>规则名称</th>
+                        <th>关键词</th>
+                        <th width="120">创建时间</th>
+                        <th width="120">{:L('ACTIONS')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <foreach name="kws" item="kw" key="k">
+                        <tr id='kw{$k}'>
+                            <td>{$kw['rule_name']}</td>
+                            <td>
+                        <foreach name="kw.keyword_list_info" item="row"><span>{$row['content']}</span></foreach>
+                            </td>
+                            <td>{$kw['create_time']|date="Y-m-d H:i:s", ###}</td>
+                            <td>
+                                <a href="javascript:kwdetail({$k})">查看回复</a> | 
+                                <a href="{:U('Reply/kwEdit',array('id'=>$k+1,'wxid'=>$wxid))}">修改</a> | 
+                                <a class="js-ajax-delete" data-msg='确认删除？' href="{:U('Reply/kwDel',array('id'=>$k+1,'wxid'=>$wxid))}">删除</a>
+                                
+                            </td>
+                        </tr>
+                    </foreach>
+                </tbody>
+            </table>
+            
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/countable/jquery.simplyCountable.min.js"></script>
+        <script>
+            
+            var kwlist = {$kws|json_encode};
+            function kwdetail(index) {
+                //alert(kwlist[index]['rule_name']);
+                //alert($('.kwdetail').length);
+                $('tr').remove('.kwdetail');
+                var list = kwlist[index]['reply_list_info'];
+                var html = '';
+                for(var i=0;i<list.length;i++) {
+                    if(list[i].type == 'text') {
+                        html += '<tr class="kwdetail"><td colspan="4">'+list[i].content+'</td></tr>';
+                    }
+                }
+                
+                $('#kw'+index).after(html);
+            }
+        </script>
+</body>
+</html>

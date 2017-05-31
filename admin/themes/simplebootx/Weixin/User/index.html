@@ -1,0 +1,79 @@
+<admintpl file="header" />
+<link href="__PUBLIC__/css/extend.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('User/index')}">微信用户</a></li>
+        </ul>
+
+        <div class="well">
+            公众号：&nbsp;
+            <foreach name="confs" item="conf" >
+                <if condition="$wxid eq $conf['id'] ">
+                    <a class="active" href="javascript:void(0);">{$conf['name']}</a>
+                    <else />
+                    <a href="{:U('User/index','wxid=')}{$conf['id']}">{$conf['name']}</a>
+                </if>
+            </foreach>
+        </div>
+    
+    <if condition="$confs[$wxid]['pass'] lt 1">
+        <div class="well">
+            此公众号还没有通过认证，不能查看用户
+        </div>
+    <else />
+        
+        <table class="table table-hover table-bordered table-list" id="menus-table">
+            <tbody>
+            <thead>
+                <tr>
+                    <th>头像</th>
+                    <th>昵称</th>
+                    <th>公众号</th>
+                    <th>所属地域</th>
+                    <th>关注时间</th>
+                    <th>备注</th>
+                    <th width="180">{:L('ACTIONS')}</th>
+                </tr>
+            </thead>
+            <foreach name="posts" item="vo">
+                <tr>
+                    <td><img src="{$vo.headimgurl}" style="width:48px;height:48px;cursor:pointer;" onclick="parent.image_preview_dialog(this.src);"></td>
+                    <td>{$vo.nickname}</td>
+                    <td>{$confs[$wxid]['name']}</td>
+                    <td>
+                        {$vo.country}{$vo.province}{$vo.city}
+                    </td>
+                    <td>{$vo.subscribe_time|date="Y-m-d", ###}</td>
+                    <td>{$vo.remark}</td>
+                    <td>拉黑</td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </if>
+    </div>
+    
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script>
+            $(document).ready(function() {
+                    Wind.css('treeTable');
+                    Wind.use('treeTable', function() {
+                            $("#menus-table").treeTable({
+                                    indent : 20
+                            });
+                    });
+            });
+
+            setInterval(function() {
+                    var refersh_time = getCookie('refersh_time_admin_weixinuser_index');
+                    if (refersh_time == 1) {
+                            reloadPage(window);
+                    }
+            }, 1000);
+            setCookie('refersh_time_admin_weixinuser_index', 0);
+    </script>
+</body>
+</html>

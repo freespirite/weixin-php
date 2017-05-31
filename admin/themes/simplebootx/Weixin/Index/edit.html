@@ -1,0 +1,112 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Index/index')}">{:L('ADMIN_WEIXIN_INDEX')}</a></li>
+			<li class="active"><a href="{:U('Index/add')}">{:L('ADMIN_WEIXIN_EDIT')}</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form input-form01" action="{:U('Index/editPost')}">
+			<fieldset>
+				
+				<div class="control-group">
+					<label class="control-label">名称:</label>
+					<div class="controls">
+						<input type="text" name="name" id="name" maxlength="16" value="{$data['name']}">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">微信号:</label>
+					<div class="controls">
+						<input type="text" name="account" id="account" maxlength="20" value="{$data['account']}">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">类型:</label>
+					<div class="controls">
+						<select name="level">
+							{$select_categorys}
+						</select>
+					</div>
+				</div>
+                            
+                            <div class="control-group">
+                                <label class="control-label">二维码图:</label>
+                                <div class="controls">  
+                                    <input type="hidden" name="pic1" id="pic1" value="{$data['pic1']|default=''}">
+                                    <a href="javascript:upload_one_image('图片上传','#pic1');">
+                                        <if condition="$data.pic1 eq ''">
+                                            <img src="__TMPL__Public/assets/images/default-thumbnail.png" id="pic1-preview" width="80" style="cursor: hand" />
+                                            <else />
+                                            <img src="{:sp_get_image_preview_url($data['pic1'])}" id="pic1-preview" width="80" style="cursor: hand"/>
+                                        </if>
+                                    </a>
+                                    <a class="btn btn-small" href="javascript:cancle();">取消图片</a>
+
+                                </div>
+                            </div>
+                            
+				<div class="control-group">
+					<label class="control-label">AppId:</label>
+					<div class="controls">
+						<input type="text" name="key" id="key" maxlength="32" value="{$data['key']}">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">AppSecret:</label>
+					<div class="controls">
+						<input type="text" name="secret" id="secret" maxlength="32" value="{$data['secret']}">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+                                <div class="control-group">
+					<label class="control-label">EncodingAESKey:</label>
+					<div class="controls">
+						<input type="text" name="aeskey" id="aeskey" maxlength="50" value="{$data['aeskey']}">
+                                                <br/><span>消息加解密方式为明文时不需要</span>
+					</div>
+				</div>
+                                <div class="control-group">
+					<label class="control-label">Token:</label>
+					<div class="controls">
+						<input type="text" name="token" id="token" maxlength="32" value="{$data['token']}">
+                                                <span class="form-required">*</span>
+                                                <br/><span>与公众平台接入设置值一致，必须为英文或者数字，长度为3到32个字符. 请妥善保管.</span>
+					</div>
+				</div>
+                                <div class="control-group">
+					<label class="control-label">接口地址:</label>
+					<div class="controls">
+						<input type="text" name="url" style="color:#666f6f;" onclick="select();" value="{:C('WEIXIN.SERVER_URL')}{$data['code']}" readonly="true">
+                                                <br/><span>设置“公众平台接口”配置信息中的接口地址</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">备注:</label>
+					<div class="controls">
+						<textarea name="remark" id="remark" rows="5" cols="57">{$data['remark']}</textarea>
+                                                <br/><span>100字内，多出部分将被忽略。</span>
+					</div>
+				</div>
+				
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+				<a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+                                <input type="hidden" name="id" value="{$data.id}">
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+        <script>
+        function cancle() {
+            $('#pic1-preview').attr('src','__TMPL__Public/assets/images/default-thumbnail.png');
+            $('#pic1').val('');
+//            return false;
+        }    
+        </script>
+</body>
+</html>

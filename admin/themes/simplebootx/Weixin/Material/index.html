@@ -1,0 +1,250 @@
+<admintpl file="header" />
+<link href="__PUBLIC__/css/extend.css" rel="stylesheet" />
+<style>
+    .layui-layer-content span {
+	position:relative;
+	float:left;
+	padding: 5px 0 0 0;
+	margin:5px 0 0 5px;
+	text-align:left;
+	height:25px;
+	width:32%;
+        overflow: hidden;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="javascript:void(0);">素材列表</a></li>
+        </ul>
+        
+    <if condition="count($confs) eq 0">
+        <div class="well">
+            公众号：&nbsp;还没有绑定公众号，<a class="toset" href="{:U('Index/add')}">点击这里进行绑定操作</a>
+        </div>
+    <else />
+        <div class="well">
+            公众号：&nbsp;
+            <foreach name="confs" item="conf" >
+                <if condition="$wxid eq $conf['id'] ">
+                    <a class="active" href="javascript:void(0);">{$conf['name']}</a>
+                    <else />
+                    <a href="{:U('Material/index',array('wxid'=>$conf['id']))}">{$conf['name']}</a>
+                </if>
+            </foreach>
+        </div>
+    
+        <if condition="$confs[$wxid]['pass'] lt 1">
+            <div class="well">
+                此公众号还没有通过认证，不能操作此版块
+            </div>
+        <else />
+        
+        <div class="well">
+            <foreach name="types" item="v" key="k">
+                <if condition="$k eq $curtype ">
+                    <label class="radio inline"><input type="radio" name="mtype" value="{$k}" checked="checked">{$v}</label>
+                <else />
+                    <label class="radio inline"><input type="radio" name="mtype" value="{$k}" >{$v}</label>
+                </if>
+            </foreach>
+            &nbsp;&nbsp;&nbsp;
+            <label class="radio inline">
+                <php>if ($curtype == 'image') {</php>
+                    <a class="btn-info" href="javascript:upload_weixin_image('图片上传','#pic1', {$wxid});">+新增{$types[$curtype]}</a>
+                <php>}else{</php>
+                    <a class="btn-info" href="{:U('Material/addNews',array('wxid'=>$wxid))}">+新增{$types[$curtype]}</a>
+                <php>}</php>
+            </label>
+        </div>
+        <table class="table table-hover table-list" id="menus-table">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>时间</th>
+                    <th width="140">{:L('ACTIONS')}</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+            <foreach name="data" item="row">
+                <tr>
+                    <td>{$row['title']}</td>
+                    <td>{$types[$curtype]}</td>
+                    <td>{$row['time']}</td>
+                    <td>
+                        <if condition="$row['url'] neq ''"><a href="{$row['url']}" target='_blank'>查看</a> | </if>
+                        <a href="{:U('Material/del', array('wxid'=>$wxid,'mid'=>$row['media_id']))}" class="js-ajax-dialog-btn" data-msg="此操作不可恢复，确认删除！">删除</a>
+                        <if condition="$curtype eq 'news' ">
+                        <a href="javascript:showlist({$wxid},'{$row['media_id']}')">预览</a>
+                        <a href="javascript:showgroup({$wxid},'{$row['media_id']}')" >群发</a>
+                        </if>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+        </if>
+    </if>
+    </div>
+    <script src="__PUBLIC__/js/common.js"></script>
+    <script>
+        Wind.css('layer');
+        var populayer = null;
+        
+        $(function(){
+            $('input[name="mtype"]').click(function(){
+                location.href = "{:U('Material/index',array('wxid'=>$wxid))}&t="+$(this).val();
+            });
+        });
+        function showlist(wxid,mid) {
+            
+            $.ajax({ 
+                type: "post", 
+                url: "index.php?g=Weixin&m=User&a=getList",
+                data: {wxid: wxid},
+                dataType: "json", 
+                success: function (json) {
+                    if(json.status == 0) {
+                        Wind.use("layer", function () {layer.msg(json.message);});
+                        return;
+                    }
+                    var html = '';
+                    for(var i=0;i<json.data.length;i++) {
+                        html += '<span><input type="radio" name="openid" value="'+json.data[i].openid+'">'+json.data[i].nickname+'</span>';
+                    }
+                    Wind.use("layer", function () {
+                        populayer = layer.open({
+                            type: 1,
+                            skin: 'layui-layer-rim', //加上边框
+                            area: ['500px', '330px'], //宽高
+                            btn: ['发送预览', '取消'],
+                            yes: function(){
+                                topreview(wxid,mid);
+                            },
+                            btn2: function(){
+                                layer.closeAll();
+                            },
+                            content: html
+                          });
+                    });
+                }, 
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Wind.use("layer", function () {
+                        layer.alert(errorThrown, {
+                            skin: 'layui-layer-lan'
+                            ,closeBtn: 0
+                            ,anim: 4 //动画类型
+                          });
+                    });
+                }
+            });
+            
+        }
+        
+        function topreview(wxid,mid) {
+            var val = $('input:radio[name="openid"]:checked').val();
+            var tip = null;
+            if(val == null) {
+                Wind.use("layer", function () {layer.msg('请选择要发送的预览用户');});
+                return;
+            }
+            Wind.use("layer", function () {tip=layer.msg('正在同步到微信，请稍候...', {time: 0, icon:16, shade: 0.3,shadeClose: false});});
+            $.ajax({ 
+                type: "post", 
+                url: "index.php?g=Weixin&m=Material&a=preview",
+                data: {wxid: wxid, openid: val, mid: mid},
+                dataType: "json", 
+                success: function (json) {
+                    if(json.status == 0) {
+                        layer.close(tip);
+                        Wind.use("layer", function () {layer.msg('预览失败:'+json.message);});
+                    } else {
+                        layer.closeAll();
+                        Wind.use("layer", function () {layer.msg('发送预览成功，请在手机上查看效果！');});
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Wind.use("layer", function () {layer.msg(errorThrown);});
+                }
+            });
+        }
+        
+        function showgroup(wxid,mid) {
+            $.ajax({ 
+                type: "post", 
+                url: "index.php?g=Weixin&m=User&a=getTags",
+                data: {wxid: wxid},
+                dataType: "json", 
+                success: function (json) {
+                    if(json.status == 0) {
+                        Wind.use("layer", function () {layer.msg(json.message);});
+                        return;
+                    }
+                    var html = '<span><input type="radio" name="tag" value="0">所有人</span>';
+                    for(var i=0;i<json.data.length;i++) {
+                        html += '<span><input type="radio" name="tag" value="'+json.data[i].id+'">'+json.data[i].name+'('+json.data[i].count+'人)</span>';
+                    }
+                    Wind.use("layer", function () {
+                        populayer = layer.open({
+                            type: 1,
+                            skin: 'layui-layer-rim', //加上边框
+                            area: ['500px', '250px'], //宽高
+                            btn: ['群发', '取消'],
+                            yes: function(){
+                                sendall(wxid,mid);
+                            },
+                            btn2: function(){
+                                layer.closeAll();
+                            },
+                            content: html
+                          });
+                    });
+                }, 
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Wind.use("layer", function () {
+                        layer.alert(errorThrown, {
+                            skin: 'layui-layer-lan'
+                            ,closeBtn: 0
+                            ,anim: 4 //动画类型
+                          });
+                    });
+                }
+            });
+        }
+        function sendall(wxid,mid) {
+            var val = $('input:radio[name="tag"]:checked').val();
+            var tip = null;
+            if(val == null) {
+                Wind.use("layer", function () {layer.msg('请选择要群发的用户组');});
+                return;
+            }
+            Wind.use("layer", function () {layer.msg('正在同步到微信，请稍候...', {time: 0, icon:16, shade: 0.3,shadeClose: false});});
+            $.ajax({ 
+                type: "post", 
+                url: "index.php?g=Weixin&m=Material&a=sendall",
+                data: {wxid: wxid, tag: val, mid: mid},
+                dataType: "json", 
+                success: function (json) {
+                    if(json.status == 0) {
+                        layer.close(tip);
+                        Wind.use("layer", function () {layer.msg('群发失败:'+json.message);});
+                    } else if(json.status == 1){
+                        layer.closeAll();
+                        Wind.use("layer", function () {layer.msg('群发成功，请在手机上查看效果！');});
+                    } else {
+                        //layer.close(tip);
+                        Wind.use("layer", function () {layer.msg('群发失败.');});
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    Wind.use("layer", function () {layer.msg(errorThrown);});
+                }
+            });
+        }
+    </script>
+</body>
+</html>

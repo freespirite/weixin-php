@@ -1,0 +1,110 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li><a href="{:U('Reply/index')}">{:L('ADMIN_WEIXIN_REPLY_INDEX')}</a></li>
+			<li><a href="{:U('Reply/auto')}">{:L('ADMIN_WEIXIN_REPLY_AUTO')}</a></li>
+                        <li><a href="{:U('Reply/kw')}">{:L('ADMIN_WEIXIN_REPLY_KW')}</a></li>
+                        <li class="active"><a href="javascript:void(0);">{:L('ADMIN_WEIXIN_REPLY_KWEDIT')}</a></li>
+		</ul>
+            <if condition="$wxid eq 0">
+                <div class="well">
+                    公众号：&nbsp;还没有绑定公众号，<a class="toset" href="{:U('Index/add')}">点击这里进行绑定操作</a>
+		</div>
+            <else />
+                <div class="well">
+                    关键词回复规则修改
+
+		</div>
+            
+                <form class="form-horizontal js-ajax-form" action="{:U('Reply/kwPost')}" method="post">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">规则名称：</label>
+                            <div class="controls">
+                                <input type="text" name="rule_name" value="{$kws['rule_name']}" style="width:50%;" maxlength="30">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">回复类型：</label>
+                            <div class="controls">
+                                <input type="radio" name="reply_mode" value="random_one" <if condition="$kws['reply_mode'] eq 'random_one'">checked</if>> 随机回复 
+                                <input type="radio" name="reply_mode" value="reply_all" <if condition="$kws['reply_mode'] eq 'reply_all'">checked</if>> 全部回复
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label class="control-label">匹配类型：</label>
+                            <div class="controls">
+                                <input type="radio" name="match_mode" value="equal" <if condition="$kws['match_mode'] eq 'equal'">checked</if>> 完全匹配 
+                                <input type="radio" name="match_mode" value="contain" <if condition="$kws['match_mode'] eq 'contain'">checked</if>> 模糊匹配 
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">关键词：</label>
+                            <div class="controls">
+                                <textarea name='keyword'  style='width:50%;height:60px;'>
+<foreach name="kws.keyword_list_info" item="row"><php> echo $row['content']."\n";</php></foreach></textarea><p>换行分割，每个关键词为一行</p>
+                            </div>
+                        </div>
+
+                        <foreach name="kws.reply_list_info" item="content" key='k'>
+                            <div class="control-group">
+                                <label class="control-label"><if condition="$k eq 0">回复：<else />&nbsp;</if></label>
+                                <div class="controls">
+                                    <textarea name='reply[]' style='width:50%;height:60px;'>{$content}</textarea>
+                                    <if condition="$k eq 0">
+                                        <a class="add" href='javascript:void(0);'><i class="fa fa-plus-square"></i></a>
+                                    <else />
+                                        <a class="del" href='javascript:delone(this);'><i class="fa fa-minus-square"></i></a>
+                                    </if>
+                                </div>
+                            </div>
+                        </foreach>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+                        <a class="btn" href="javascript:history.back(-1);">{:L('BACK')}</a>
+                        <input type="hidden" name="wxid" value="{$wxid}">
+                        <input type="hidden" name="id" value="{$id}">
+                    </div>
+                </form>
+            </if>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/js/countable/jquery.simplyCountable.min.js"></script>
+        <script>
+            var replynum = 0;
+            $(function(){
+                //$('.countable').simplyCountable({maxCount:500, strictMax: true});
+                replynum = $('textarea[name="reply[]"]').length;
+                $('.add').click(function(){
+                    if(replynum >= 5) { return; }
+                    var html = '<div class="control-group">';
+                    html += '<label class="control-label">&nbsp;</label>';
+                    html += '<div class="controls">';
+                    html += '<textarea name="reply[]" style="width:50%;height:60px;"></textarea>';
+                    html += '&nbsp;<a class="del" href="javascript:void(0);"><i class="fa fa-minus-square"></i></a>';
+                    html += '</div></div>';
+                    //alert($(this).html());
+                    $(this).parent().parent().parent().append(html);
+                    delone();
+                    replynum++;
+                });
+                
+                delone();
+            });
+            function delone() {
+                $('.del').click(function(){
+//                    if($(this).html() != '') {
+//                        if(!confirm("确认删除么？")){ return; }
+//                    }
+                    $(this).parent().parent().remove();
+                    replynum--;
+                });
+            }
+        </script>
+</body>
+</html>
